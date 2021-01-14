@@ -12,27 +12,27 @@ Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://pad
 
 ### Papers
 
-**Unsupervised Extractive Summarization with Mutual Information**
-**Vishakh Padmakumar**, He He
-*Currently under review at EACL 2021*
+**Unsupervised Extractive Summarization with Mutual Information** <br/>
+**Vishakh Padmakumar**, He He  <br/>
+*Currently under review at EACL 2021*  <br/>
 
-**A comparison of methods in political science text classification: Transfer learning language models for politics**
-Zhanna Tereschenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau
-*Currently under review at the journal Political Science Research Methods*
-\[[paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644)\] 
+**A comparison of methods in political science text classification: Transfer learning language models for politics**  <br/>
+Zhanna Tereschenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau  <br/>
+*Currently under review at the journal Political Science Research Methods*  <br/>
+\[[paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644)\]  <br/>
 
-Multi-Modal Content Similarities in Online Disinformation Campaigns
-Cody Buntain, **Vishakh Padmakumar**, Richard Bonneau, Jonathan Nagler, Josh Tucker
-ACM Conference on Collective Intelligence, 2020
-\[[paper](http://brandlane.dk/ci/2020/wa_files/68%20artificial%20dissimilarity.%20multi-modal%20content%20similarities%20in%20online%20campaigns.pdf)\]
+Multi-Modal Content Similarities in Online Disinformation Campaigns  <br/>
+Cody Buntain, **Vishakh Padmakumar**, Richard Bonneau, Jonathan Nagler, Josh Tucker  <br/>
+ACM Conference on Collective Intelligence, 2020  <br/>
+\[[paper](http://brandlane.dk/ci/2020/wa_files/68%20artificial%20dissimilarity.%20multi-modal%20content%20similarities%20in%20online%20campaigns.pdf)\]  <br/>
 
-**A Robust Approach to Open Vocabulary Image Retrieval with Deep Convolutional Neural Networks and Transfer Learning**
-**Vishakh Padmakumar**, Rishab Ranga, Srivalya Elluru, Sowmya Kamath S.
-2018 Pacific Neighborhood Consortium Annual Conference and Joint Meetings (PNC), IEEE
-\[[paper](https://ieeexplore.ieee.org/document/8579473)\]
+**A Robust Approach to Open Vocabulary Image Retrieval with Deep Convolutional Neural Networks and Transfer Learning**  <br/>
+**Vishakh Padmakumar**, Rishab Ranga, Srivalya Elluru, Sowmya Kamath S.  <br/>
+2018 Pacific Neighborhood Consortium Annual Conference and Joint Meetings (PNC), IEEE  <br/>
+\[[paper](https://ieeexplore.ieee.org/document/8579473)\]  <br/>
 
 ### Other Projects 
 
-**Transfer of Reinforcement Learning in a Natural Language Action Space**
-**Vishakh Padmakumar**, Francesco Preta
-\[[paper](https://drive.google.com/file/d/0B3oSiqIGgDjMRUVaVF9Gclk3Z2wwWUp4TGFxODhiZzYwWE1B/view?usp=sharing)\]
+**Transfer of Reinforcement Learning in a Natural Language Action Space**  <br/>
+**Vishakh Padmakumar**, Francesco Preta  <br/>
+\[[paper](https://drive.google.com/file/d/0B3oSiqIGgDjMRUVaVF9Gclk3Z2wwWUp4TGFxODhiZzYwWE1B/view?usp=sharing)\]  <br/>
