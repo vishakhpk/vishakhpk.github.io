@@ -1,6 +1,6 @@
 ---
 layout: home
-title: 
+title: Vishakh Padmakumar 
 ---
 I am a first year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and machine learning. I'm currently working on text generation for creative writing tasks and in interactive settings. 
 
@@ -21,7 +21,7 @@ Zhanna Tereschenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonath
 *Currently under review at the journal Political Science Research Methods*  <br/>
 \[[paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644)\]  <br/>
 
-Multi-Modal Content Similarities in Online Disinformation Campaigns  <br/>
+**Multi-Modal Content Similarities in Online Disinformation Campaigns**  <br/>
 Cody Buntain, **Vishakh Padmakumar**, Richard Bonneau, Jonathan Nagler, Josh Tucker  <br/>
 ACM Conference on Collective Intelligence, 2020  <br/>
 \[[paper](http://brandlane.dk/ci/2020/wa_files/68%20artificial%20dissimilarity.%20multi-modal%20content%20similarities%20in%20online%20campaigns.pdf)\]  <br/>
