@@ -17,7 +17,7 @@ Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://pad
 *Currently under review at EACL 2021*  <br/>
 
 **A comparison of methods in political science text classification: Transfer learning language models for politics**  <br/>
-Zhanna Tereschenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau  <br/>
+Zhanna Terechshenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau  <br/>
 *Currently under review at the journal Political Science Research Methods*  <br/>
 \[[paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644)\]  <br/>
 
