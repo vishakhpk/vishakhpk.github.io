@@ -33,6 +33,10 @@ ACM Conference on Collective Intelligence, 2020  <br/>
 
 ### Other Projects 
 
+**Counterfactual Logit Pairing with Asymmetric Counterfactuals in Text Classification**
+Lucius Bynum, **Vishakh Padmakumar**
+\[[paper](https://drive.google.com/file/d/1YwcdibxCl0z85LqtBqqWLkQ351rjeMcW/view?usp=sharing)\]  <br/>
+
 **Transfer of Reinforcement Learning in a Natural Language Action Space**  <br/>
 **Vishakh Padmakumar**, Francesco Preta  <br/>
 \[[paper](https://drive.google.com/file/d/0B3oSiqIGgDjMRUVaVF9Gclk3Z2wwWUp4TGFxODhiZzYwWE1B/view?usp=sharing)\]  <br/>
