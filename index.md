@@ -15,6 +15,7 @@ Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://pad
 **Unsupervised Extractive Summarization with Mutual Information** <br/>
 **Vishakh Padmakumar**, He He  <br/>
 *To appear at EACL 2021*  <br/>
+\[[paper](https://arxiv.org/abs/2102.06272)\]  <br/>
 
 **A comparison of methods in political science text classification: Transfer learning language models for politics**  <br/>
 Zhanna Terechshenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau  <br/>
