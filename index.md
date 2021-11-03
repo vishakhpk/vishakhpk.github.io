@@ -2,7 +2,7 @@
 layout: home
 title: Vishakh Padmakumar 
 ---
-I am a first year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and machine learning. I'm currently working on text generation for creative writing tasks and in interactive settings. 
+I am a second year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and machine learning. I'm currently working on text generation for creative writing tasks and in interactive settings. 
 
 Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on political stance classification and multimodel content sharing in online disinformation campaigns. I also interned at [LAER.AI](http://laer.ai/) in New York City where I did some work on unstructured document retrieval and active learning. 
 
@@ -12,14 +12,19 @@ Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://pad
 
 ### Papers
 
+**BBQ: A Hand-Built Bias Benchmark for Question Answering** <br/>
+Alicia Parrish, Angelica Chen, Nikita Nangia, **Vishakh Padmakumar**, Jason Phang, Jana Thompson, Phu Mon Htut, Samuel R. Bowman  <br/>
+*Arxiv Preprint*  <br/>
+\[[paper](https://arxiv.org/abs/2110.08193)\]  <br/>
+
 **Unsupervised Extractive Summarization with Mutual Information** <br/>
 **Vishakh Padmakumar**, He He  <br/>
-*To appear at EACL 2021*  <br/>
+*EACL 2021*  <br/>
 \[[paper](https://arxiv.org/abs/2102.06272)\]  <br/>
 
 **A comparison of methods in political science text classification: Transfer learning language models for politics**  <br/>
 Zhanna Terechshenko, Fridolin Linder, **Vishakh Padmakumar**, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau  <br/>
-*Currently under review at the journal Political Science Research Methods*  <br/>
+*SSRN*  <br/>
 \[[paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644)\]  <br/>
 
 **Multi-Modal Content Similarities in Online Disinformation Campaigns**  <br/>
