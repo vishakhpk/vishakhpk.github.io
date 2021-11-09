@@ -8,7 +8,7 @@ Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute
 
 I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
 
-Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. 
+Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. 
 
 ### Papers
 
