@@ -12,6 +12,11 @@ Here's my [CV](./assets/img/cv.pdf). Head over to my [personal blog](https://pad
 
 ### Papers
 
+**Machine-in-the-Loop Rewriting for Creative Image Captioning** <br/>
+**Vishakh Padmakumar**, He He  <br/>
+*Novel Ideas in Learning-to-Learn through Interaction - Workshop @ EMNLP 2021*  <br/>
+\[[paper](https://arxiv.org/abs/2111.04193)\]  <br/>
+
 **BBQ: A Hand-Built Bias Benchmark for Question Answering** <br/>
 Alicia Parrish, Angelica Chen, Nikita Nangia, **Vishakh Padmakumar**, Jason Phang, Jana Thompson, Phu Mon Htut, Samuel R. Bowman  <br/>
 *Arxiv Preprint*  <br/>
