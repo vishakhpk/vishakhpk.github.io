@@ -14,12 +14,22 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 
 **Machine-in-the-Loop Rewriting for Creative Image Captioning** <br/>
 **Vishakh Padmakumar**, He He  <br/>
-*Novel Ideas in Learning-to-Learn through Interaction - Workshop @ EMNLP 2021*  <br/>
+*To appear at NAACL 2022* <br/>
+*Previously presented at Novel Ideas in Learning-to-Learn through Interaction - Workshop @ EMNLP 2021*  <br/>
 \[[paper](https://arxiv.org/abs/2111.04193)\]  <br/>
+
+**Exploring the Role of Task Transferability in Large-Scale Multi-Task Learning** <br/>
+**Vishakh Padmakumar**, Leonard Lausen, Miguel Ballesteros, Sheng Zha, He He, George Karypis <br/>
+*To appear at NAACL 2022* <br/>
+
+**QuALITY: Question Answering with Long Input Texts, Yes!** <br/>
+Richard Yuanzhe Pang, Alicia Parrish, Nitish Joshi, Nikita Nangia, Jason Phang, Angelica Chen, **Vishakh Padmakumar**, Johnny Ma, Jana Thompson, He He and Sam Bowman
+*To appear at NAACL 2022*  <br/>
+\[[paper](https://arxiv.org/abs/2112.08608)\]  <br/>
 
 **BBQ: A Hand-Built Bias Benchmark for Question Answering** <br/>
 Alicia Parrish, Angelica Chen, Nikita Nangia, **Vishakh Padmakumar**, Jason Phang, Jana Thompson, Phu Mon Htut, Samuel R. Bowman  <br/>
-*Arxiv Preprint*  <br/>
+*ACL Findings 2022*  <br/>
 \[[paper](https://arxiv.org/abs/2110.08193)\]  <br/>
 
 **Unsupervised Extractive Summarization with Mutual Information** <br/>
