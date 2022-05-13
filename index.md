@@ -21,6 +21,7 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 **Exploring the Role of Task Transferability in Large-Scale Multi-Task Learning** <br/>
 **Vishakh Padmakumar**, Leonard Lausen, Miguel Ballesteros, Sheng Zha, He He, George Karypis <br/>
 *To appear at NAACL 2022* <br/>
+\[[paper](https://arxiv.org/abs/2204.11117)\]  <br/>
 
 **QuALITY: Question Answering with Long Input Texts, Yes!** <br/>
 Richard Yuanzhe Pang, Alicia Parrish, Nitish Joshi, Nikita Nangia, Jason Phang, Angelica Chen, **Vishakh Padmakumar**, Johnny Ma, Jana Thompson, He He and Sam Bowman <br/>
