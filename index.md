@@ -12,6 +12,11 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 
 ### Papers
 
+**Help me write a Poem - Instruction Tuning as a Vehicle for Collaborative Poetry Writing** <br/>
+Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, He He  <br/>
+*EMNLP 2022* <br/>
+\[[paper](https://arxiv.org/abs/2210.13669)\] \[[website](https://copoet-emnlp.github.io/)\]  <br/>
+
 **Machine-in-the-Loop Rewriting for Creative Image Captioning** <br/>
 **Vishakh Padmakumar**, He He  <br/>
 *NAACL 2022* <br/>
