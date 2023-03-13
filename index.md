@@ -12,6 +12,11 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 
 ### Papers
 
+**Extrapolative Controlled Sequence Generation via Iterative Refinement** <br/>
+**Vishakh Padmakumar**\*, Richard Yuanzhe Pang, He He, Ankur P. Parikh  <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2303.04562)\]  <br/>
+
 **Help me write a Poem - Instruction Tuning as a Vehicle for Collaborative Poetry Writing** <br/>
 Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, He He  <br/>
 *EMNLP 2022* <br/>
