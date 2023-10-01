@@ -37,6 +37,11 @@ Richard Yuanzhe Pang, **Vishakh Padmakumar**, Thibault Sellam, Ankur P Parikh, H
 *ACL 2023* <br/>
 \[[paper](https://arxiv.org/abs/2211.08714)\]  <br/>
 
+**Investigating The Representation Of Open Domain Dialogue Context For Transformer Models** <br/>
+**Vishakh Padmakumar**, Behnam Hedayatnia, Di Jin, Patrick Lange, Seokhwan Kim, Nanyun Peng, Yang Liu, Dilek Hakkani-Tür <br/>
+*SIGDIAL 2023* <br/>
+\[[paper](https://www.amazon.science/publications/investigating-the-representation-of-open-domain-dialogue-context-for-transformer-models)\]  <br/>
+
 **Help me write a Poem - Instruction Tuning as a Vehicle for Collaborative Poetry Writing** <br/>
 Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, He He  <br/>
 *EMNLP 2022* <br/>
