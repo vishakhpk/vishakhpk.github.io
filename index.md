@@ -2,7 +2,7 @@
 layout: home
 title: Vishakh Padmakumar 
 ---
-I am a ~~second~~ third year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and machine learning. I'm currently working on collaborative text generation for creative writing tasks and other interactive settings. I also help organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. 
+I am a fourth year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and human-AI collaboration. I'm currently working on collaborative text generation for creative writing tasks and other interactive settings. I also help organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. 
 
 Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on political stance classification and multimodel content sharing in online disinformation campaigns. I also interned at [LAER.AI](http://laer.ai/) in New York City where I did some work on unstructured document retrieval and active learning. 
 
@@ -12,10 +12,30 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 
 ### Papers
 
+**Does Writing with Language Models Reduce Content Diversity?** <br/>
+**Vishakh Padmakumar**, He He <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2309.05196)\]  <br/>
+
+**Creativity Support in the Age of Large Language Models: An Empirical Study Involving Emerging Writers** <br/>
+Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, Faeze Brahman, Smaranda Muresan <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2309.12570)\]  <br/>
+
+**Testing the General Deductive Reasoning Capacity of Large Language Models Using OOD Examples** <br/>
+Abulhair Saparov, Richard Yuanzhe Pang, **Vishakh Padmakumar**, Nitish Joshi, Mehran Kazemi, Najoung Kim, He He <br/>
+*Neurips 2023* <br/>
+\[[paper](https://arxiv.org/abs/2305.15269)\]  <br/>
+
 **Extrapolative Controlled Sequence Generation via Iterative Refinement** <br/>
 **Vishakh Padmakumar**\*, Richard Yuanzhe Pang, He He, Ankur P. Parikh  <br/>
-*Preprint* <br/>
+*ICML 2023* <br/>
 \[[paper](https://arxiv.org/abs/2303.04562)\]  <br/>
+
+**Reward Gaming in Conditional Text Generation** <br/>
+Richard Yuanzhe Pang, **Vishakh Padmakumar**, Thibault Sellam, Ankur P Parikh, He He <br/>
+*ACL 2023* <br/>
+\[[paper](https://arxiv.org/abs/2211.08714)\]  <br/>
 
 **Help me write a Poem - Instruction Tuning as a Vehicle for Collaborative Poetry Writing** <br/>
 Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, He He  <br/>
