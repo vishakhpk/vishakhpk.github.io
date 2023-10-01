@@ -20,7 +20,7 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 **Creativity Support in the Age of Large Language Models: An Empirical Study Involving Emerging Writers** <br/>
 Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, Faeze Brahman, Smaranda Muresan <br/>
 *Preprint* <br/>
-\[[paper](https://arxiv.org/abs/2309.12570)\]  <br/>
+\[[paper](https://arxiv.org/abs/2309.12570)\] \[[website](https://collab-stories.github.io/)\]  <br/>
 
 **Testing the General Deductive Reasoning Capacity of Large Language Models Using OOD Examples** <br/>
 Abulhair Saparov, Richard Yuanzhe Pang, **Vishakh Padmakumar**, Nitish Joshi, Mehran Kazemi, Najoung Kim, He He <br/>
