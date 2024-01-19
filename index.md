@@ -14,7 +14,7 @@ Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.go
 
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
 **Vishakh Padmakumar**, He He <br/>
-*Preprint* <br/>
+*ICLR 2024* <br/>
 \[[paper](https://arxiv.org/abs/2309.05196)\]  <br/>
 
 **Creativity Support in the Age of Large Language Models: An Empirical Study Involving Emerging Writers** <br/>
