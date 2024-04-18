@@ -10,6 +10,11 @@ I did my undergrad at the [National Institute of Technology - Karnataka](https:/
 
 Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakh@nyu.edu>. 
 
+<ul style="height: 300px; overflow: auto">
+    <li><i>May 2024: </i> I'm attending ICLR 2024 to present our work on diversity in collaborative writing. See you in Vienna! </li><br />
+    <li><i>March 2024: </i> I gave virtual talks at <a href="https://milanlproc.github.io/coding_aperitivo/">Bocconi University</a> and the <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">University of Melbourne</a> </li><br />
+</ul>
+
 ### Papers
 
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
