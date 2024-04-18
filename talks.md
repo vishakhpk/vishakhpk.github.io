@@ -14,7 +14,7 @@ EMNLP 2023 <br />
 
 **Extrapolative Controlled Sequence Generation via Iterative Refinement** <br />
 ICML 2023 <br />
-\[[Slides](./assets/img/ice_icml_22.pdf)\] \[[Recording](https://slideslive.com/39002801/extrapolative-controlled-sequence-generation-via-iterative-refinement?ref=search-presentations)\] <br />
+\[[Slides](./assets/img/ice_icml_23.pdf)\] \[[Recording](https://slideslive.com/39002801/extrapolative-controlled-sequence-generation-via-iterative-refinement?ref=search-presentations)\] <br />
 
 **Collaborative Creative Writing**<br />
 IBM Research India <br />
