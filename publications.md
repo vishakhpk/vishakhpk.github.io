@@ -1,4 +1,4 @@
-### Papers
+You can also browse my [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao)
 
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
 **Vishakh Padmakumar**, He He <br/>
