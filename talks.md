@@ -19,7 +19,7 @@ ICML 2023 <br />
 **Collaborative Creative Writing**<br />
 IBM Research India <br />
 January 2023 <br />
-\[[Slides](,/assets/img/ibm_talk.pdf)\] <br />
+\[[Slides](./assets/img/ibm_talk.pdf)\] <br />
 
 **Help me write a poem: Instruction Tuning as a Vehicle for Collaborative Poetry Writing** <br />
 EMNLP 2022<br />
