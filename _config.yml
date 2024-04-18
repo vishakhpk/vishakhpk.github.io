@@ -18,8 +18,8 @@ navbar-links:
 #  Resources:
 #    - Beautiful Jekyll: "https://beautifuljekyll.com"
 #    - Learn markdown: "https://www.markdowntutorial.com/"
-  Blog: "https://paddyspen.wordpress.com//"
   Publications: "publications"
+  Blog: "https://paddyspen.wordpress.com//"
 
 # --- Logo --- #
 

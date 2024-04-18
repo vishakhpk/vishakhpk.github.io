@@ -8,13 +8,20 @@ Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute
 
 I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
 
-Here's my [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakh@nyu.edu>. 
+Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakh@nyu.edu>. 
+
+### Updates:
 
 <ul style="height: 300px; overflow: auto">
     <li><i>May 2024: </i> I'm attending ICLR 2024 to present our work on diversity in collaborative writing. See you in Vienna! </li><br />
     <li><i>March 2024: </i> I gave virtual talks at <a href="https://milanlproc.github.io/coding_aperitivo/">Bocconi University</a> and the <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">University of Melbourne</a> </li><br />
+    <li><i>December 2023: </i> I attended EMNLP 2023 and helped give a tutorial on Creative Natural Language Generation with [Tuhin Chakrabarty](https://tuhinjubcse.github.io/), [Violet Peng](https://vnpeng.net/) and [He He](https://hhexiy.github.io/). See the slides [here](https://emnlp2023-creative-nlg.github.io/)! </li><br />
+    <li><i>July 2023: </i> I presented our [work](https://arxiv.org/abs/2303.04562) on extrapolative generation with iterative refinement at ICML 2023. </li><br />
+    <li><i>July 2023: </i> I was the co-chair for the ACL 2023 [Student Research Workshop](https://acl2023-srw.github.io/) along with [Gisela Vallejo](http://gvallejo.co/) and [Yao Fu](https://franxyao.github.io/). <li><br />
 </ul>
 
+
+<!--
 ### Papers
 
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
@@ -102,3 +109,4 @@ Lucius Bynum, **Vishakh Padmakumar** <br/>
 **Transfer of Reinforcement Learning in a Natural Language Action Space**  <br/>
 **Vishakh Padmakumar**, Francesco Preta  <br/>
 \[[paper](https://drive.google.com/file/d/0B3oSiqIGgDjMRUVaVF9Gclk3Z2wwWUp4TGFxODhiZzYwWE1B/view?usp=sharing)\]  <br/>
+-->
