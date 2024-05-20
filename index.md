@@ -13,7 +13,7 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
-    <li><i>May 2024: </i> I'm attending ICLR 2024 to present our <a href="https://arxiv.org/abs/2309.05196">work</a> on diversity in collaborative writing. See you in Vienna! </li><br />
+    <li><i>May 2024: </i> I attended ICLR 2024 to present our <a href="https://arxiv.org/abs/2309.05196">work</a> on diversity in collaborative writing. On the way back, I also gave a talk about our work at Oxford in the UK! </li><br />
     <li><i>March 2024: </i> I gave virtual talks at <a href="https://milanlproc.github.io/coding_aperitivo/">Bocconi University</a> and the <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">University of Melbourne</a> </li><br />
     <li><i>December 2023: </i> I attended EMNLP 2023 and helped give a tutorial on Creative Natural Language Generation with <a href="https://tuhinjubcse.github.io/">Tuhin Chakrabarty</a>, <a href="https://vnpeng.net/">Violet Peng</a> and <a href="https://hhexiy.github.io/">He He</a>. See the slides <a href="https://emnlp2023-creative-nlg.github.io/">here</a>! </li><br />
     <li><i>July 2023: </i> I presented our <a href="https://arxiv.org/abs/2303.04562">work</a> on extrapolative generation with iterative refinement at ICML 2023. </li><br />

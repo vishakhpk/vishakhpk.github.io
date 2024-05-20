@@ -18,7 +18,7 @@ navbar-links:
 #  Resources:
 #    - Beautiful Jekyll: "https://beautifuljekyll.com"
 #    - Learn markdown: "https://www.markdowntutorial.com/"
-  Home: ""
+  Home: "https://vishakhpk.github.io"
   Publications: "publications"
   Talks: "talks"
   Blog: "https://paddyspen.wordpress.com//"
