@@ -12,7 +12,7 @@ You can also browse my [Google Scholar page](https://scholar.google.com/citation
 
 **Creativity Support in the Age of Large Language Models: An Empirical Study Involving Emerging Writers** <br/>
 Tuhin Chakrabarty\*, **Vishakh Padmakumar**\*, Faeze Brahman, Smaranda Muresan <br/>
-*ACM Creativity and Cognitioni 2024* <br/>
+*ACM Creativity and Cognition 2024* <br/>
 \[[paper](https://arxiv.org/abs/2309.12570)\] \[[website](https://collab-stories.github.io/)\]  <br/>
 
 **Testing the General Deductive Reasoning Capacity of Large Language Models Using OOD Examples** <br/>
