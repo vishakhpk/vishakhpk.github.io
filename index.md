@@ -13,7 +13,7 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
-    <li><i>September 2024: </i>Interning with the <a href="https://www.semanticscholar.org/research/research-team">Semantic Scholar research team</a>) over the Fall.</li><br />
+    <li><i>September 2024: </i>Interning with the <a href="https://www.semanticscholar.org/research/research-team">Semantic Scholar research team</a> over the Fall.</li><br />
     <li><i>June 2024: </i> Attended <a href="https://cc.acm.org/2024/"> Creativity and Cognition </a> in Chicago, my first HCI conference, and presented our work on analyzing perspectives from <a href="https://dl.acm.org/doi/abs/10.1145/3635636.3656201">emerging professional writers.</a></li><br />
     <li><i>May 2024: </i> I interned with the Document Intelligence Lab at Adobe in San Jose over the summer, working on long document generation prioritizing diversity of content with <a href="https://research.adobe.com/person/jennifer-healey/">Jennifer Healey</a>, <a href="https://darbour.github.io/">David Arbour</a> and <a href="https://research.adobe.com/person/tong-sun/">Tong Sun</a>. </li><br />
     <li><i>May 2024: </i> I attended ICLR 2024 to present our <a href="https://arxiv.org/abs/2309.05196">work</a> on diversity in collaborative writing. On the way back, I also gave a talk about our work at Oxford in the UK! </li><br />
