@@ -2,7 +2,7 @@
 layout: home
 title: Hi, I'm Vishakh 
 ---
-I am a fourth year PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and human-AI collaboration. I'm currently working on collaborative text generation for creative writing tasks and other interactive settings. I also help organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. 
+I am a [fifth year](https://phdcomics.com/comics/archive.php?comicid=189) PhD Student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I am advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and human-AI collaboration. I'm currently working on collaborative text generation for creative writing tasks and other interactive settings. I also help organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. 
 
 Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on political stance classification and multimodel content sharing in online disinformation campaigns. I've also had the chance to intern with AWS, Amazon Alexa AI and LAER.AI while in grad school.
 
@@ -13,6 +13,9 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
+    <li><i>September 2024: </i>Interning with the [Semantic Scholar research team](https://www.semanticscholar.org/research/research-team) over the Fall</li><br />
+    <li><i>June 2024: </i> Attended [Creativity and Cognition](https://cc.acm.org/2024/) in Chicago, my first HCI conference, and presented our work on working with [emerging professional writers](https://dl.acm.org/doi/abs/10.1145/3635636.3656201)</li><br />
+    <li><i>May 2024: </i> I interned with the Document Intelligence Lab at Adobe in San Jose over the summer, working on long document generation prioritizing diversity of content with [Jennifer Healey](https://research.adobe.com/person/jennifer-healey/), [David Arbour](https://darbour.github.io/) and [Tong Sun](https://research.adobe.com/person/tong-sun/). </li><br />
     <li><i>May 2024: </i> I attended ICLR 2024 to present our <a href="https://arxiv.org/abs/2309.05196">work</a> on diversity in collaborative writing. On the way back, I also gave a talk about our work at Oxford in the UK! </li><br />
     <li><i>March 2024: </i> I gave virtual talks at <a href="https://milanlproc.github.io/coding_aperitivo/">Bocconi University</a> and the <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">University of Melbourne</a> </li><br />
     <li><i>December 2023: </i> I attended EMNLP 2023 and helped give a tutorial on Creative Natural Language Generation with <a href="https://tuhinjubcse.github.io/">Tuhin Chakrabarty</a>, <a href="https://vnpeng.net/">Violet Peng</a> and <a href="https://hhexiy.github.io/">He He</a>. See the slides <a href="https://emnlp2023-creative-nlg.github.io/">here</a>! </li><br />
