@@ -3,6 +3,10 @@ layout: page
 title: Talks
 ---
 
+**Side Effects May Include Homogenization and Overusing Cliches** <br />
+Allen Institute for AI <br />
+\[[Recording](https://www.youtube.com/watch?v=ACWxtLvSvaA&t=3s)\]
+
 **Does Writing With Language Models (LLMs) Reduce Content Diversity?** <br />
 Oxford Internet Institute, <a href="https://milanlproc.github.io/coding_aperitivo/">Coding Aperitivo</a> at Bocconi University and <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">UniMelb NLP Reading Group</a><br />
 March 2024<br />
