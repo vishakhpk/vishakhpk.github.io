@@ -3,7 +3,7 @@ layout: page
 title: Publications
 ---
 
-You can also browse my [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao)
+You can also browse my [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao) for a more up-to-date list of papers.
 
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
 **Vishakh Padmakumar**, He He <br/>

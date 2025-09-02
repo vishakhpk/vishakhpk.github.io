@@ -2,17 +2,20 @@
 layout: home
 title: Vishakh Padmakumar
 ---
-I am recently graduated(!!) PhD student at the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I was advised by [Prof. He He](https://hhexiy.github.io/). My research is broadly in the field of natural language processing and human-AI collaboration. I'm currently working on collaborative text generation for creative writing tasks and other interactive settings. I also help organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. 
+I just started as a post-doctoral researcher at Stanford, working with [Diyi Yang](https://cs.stanford.edu/~diyiy/) at the [SALT](https://saltlab.stanford.edu/) Lab. I recently graduated with a PhD from the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I was advised by [Prof. He He](https://hhexiy.github.io/). 
 
-Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on political stance classification and multimodel content sharing in online disinformation campaigns. I've also had the chance to intern with AWS, Amazon Alexa AI and LAER.AI while in grad school.
+My research is broadly in human-centered NLP. I'm currently thinking about (1) how AI agents shape the future of work, (2) how to support co-creativity with foundation models, (3) how we can elicit more diverse LLM outputs for scientific discovery, and (4) how we can elicit more diverse output from LLMs. 
 
-I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
+My PhD thesis was on human-AI collaboration with LLMs for creative writing tasks. For many years, I also helped organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series. Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on political stance classification and multimodel content sharing in online disinformation campaigns. I've also had the chance to intern with AWS, Amazon Alexa AI and LAER.AI while in grad school. I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
 
 Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakh@nyu.edu>. 
+
 
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
+    <li><i>September 2025: </i> Moved to Stanford to join Diyi's lab! <br />
+    <li><i>July 2025: </i> My AI2 internship work on creating schemas to compare research papers was accepted to EMNLP Findings. Check out the paper <a href="https://arxiv.org/abs/2507.19521">here</a>. <br />
     <li><i>May 2025: </i>My internship work from Adobe got accepted to ACL 2025. Check out the paper <a href="https://arxiv.org/abs/2505.21859"> here </a>. I think it has cool implications for how we should think and design agentic LLM pipelines.<br />
     <li><i>April 2025: </i>Passed my thesis defense, still can't quite believe it!<br />
     <li><i>January 2025: </i>Gave a talk covering a lot of my thesis work, titled 'Side Effects May Include Homogenization and Overusing Cliches' discussing how the way we do post training of LLMs today can have uninenteded side effects. The talk is available online <a href="https://www.youtube.com/watch?v=ACWxtLvSvaA">here</a>.<br />
