@@ -14,8 +14,8 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
-    <li><i>January 2026: </i> Our paper on LLM [novelty](https://arxiv.org/abs/2504.09389) will appear at ICLR 2026, see you in Brazil! <br />
-    <li><i>November 2025: </i> Second pre-print in collaboration with the [Midjourney Storytelling Lab](https://mj-storytelling.github.io/), understanding the literary taste of users in a data-driven way. Next in the line of personalization projects I've been spending time on. <br />
+    <li><i>January 2026: </i> Our paper on LLM <a href="https://arxiv.org/abs/2504.09389">novelty</a> will appear at ICLR 2026, see you in Brazil! <br />
+    <li><i>November 2025: </i> Second <a href="https://arxiv.org/abs/2511.09310">pre-print</a> in collaboration with the <a href="https://mj-storytelling.github.io/">Midjourney Storytelling Lab</a>, understanding the literary taste of users in a data-driven way. <br />
     <li><i>September 2025: </i> Moved to Stanford to join Diyi's lab! <br />
     <li><i>July 2025: </i> My AI2 internship work on creating schemas to compare research papers was accepted to EMNLP Findings. Check out the paper <a href="https://arxiv.org/abs/2507.19521">here</a>. <br />
     <li><i>May 2025: </i>My internship work from Adobe got accepted to ACL 2025. Check out the paper <a href="https://arxiv.org/abs/2505.21859"> here </a>. I think it has cool implications for how we should think and design agentic LLM pipelines.<br />
