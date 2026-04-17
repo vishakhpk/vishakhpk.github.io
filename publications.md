@@ -5,6 +5,51 @@ title: Publications
 
 You can also browse my [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao) for a more up-to-date list of papers.
 
+**No Single Best Model for Diversity: Learning a Router for Sample Diversity** <br/>
+Yuhan Liu, Fangyuan Xu, **Vishakh Padmakumar**, Daphne Ippolito, Eunsol Choi <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2604.02319)\]  <br/>
+
+**SparkMe: Adaptive Semi-Structured Interviewing for Qualitative Insight Discovery** <br/>
+David Anugraha, **Vishakh Padmakumar**, Diyi Yang <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2602.21136)\]  <br/>
+
+**Measuring LLM Novelty As The Frontier Of Original And High-Quality Output** <br/>
+**Vishakh Padmakumar**, Chen Yueh-Han, Jane Pan, Valerie Chen, He He <br/>
+*ICLR 2026* <br/>
+\[[paper](https://arxiv.org/abs/2504.09389)\]  <br/>
+
+**LiteraryTaste: A Preference Dataset for Creative Writing Personalization** <br/>
+John Joon Young Chung, **Vishakh Padmakumar**, Melissa Roemmele, Yi Wang, Yuqian Sun, Tiffany Wang, Shm Garanganao Almeda, Brett A. Halperin, Yuwen Lu, Max Kreminski <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2511.09310)\]  <br/>
+
+**Intent-aware Schema Generation and Refinement for Literature Review Tables** <br/>
+**Vishakh Padmakumar**, Joseph Chee Chang, Kyle Lo, Doug Downey, Aakanksha Naik <br/>
+*EMNLP 2025* <br/>
+\[[paper](https://aclanthology.org/2025.findings-emnlp.1274/)\]  <br/>
+
+**Principled Content Selection to Generate Diverse and Personalized Multi-Document Summaries** <br/>
+**Vishakh Padmakumar**, Zichao Wang, David Arbour, Jennifer Healey <br/>
+*ACL 2025* <br/>
+\[[paper](https://arxiv.org/abs/2505.21859)\]  <br/>
+
+**Evaluating the Diversity and Quality of LLM Generated Content** <br/>
+Alexander Shypula, Shuo Li, Botong Zhang, **Vishakh Padmakumar**, Kayo Yin, Osbert Bastani <br/>
+*COLM 2025* <br/>
+\[[paper](https://arxiv.org/abs/2504.12522)\]  <br/>
+
+**Modifying Large Language Model Post-Training for Diverse Creative Writing** <br/>
+John Joon Young Chung, **Vishakh Padmakumar**, Melissa Roemmele, Yuqian Sun, Max Kreminski <br/>
+*COLM 2025* <br/>
+\[[paper](https://openreview.net/forum?id=1Pmuw08LoM)\]  <br/>
+
+**Transformers Struggle to Learn to Search** <br/>
+Abulhair Saparov, Srushti Ajay Pawar, Shreyas Pimpalgaonkar, Nitish Joshi, Richard Yuanzhe Pang, **Vishakh Padmakumar**, Mehran Kazemi, Najoung Kim, He He <br/>
+*ICLR 2025* <br/>
+\[[paper](https://arxiv.org/abs/2412.04703)\]  <br/>
+
 **Does Writing with Language Models Reduce Content Diversity?** <br/>
 **Vishakh Padmakumar**, He He <br/>
 *ICLR 2024* <br/>

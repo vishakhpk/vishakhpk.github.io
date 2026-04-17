@@ -14,9 +14,11 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
+    <li><i>April 2026: </i> New <a href="https://arxiv.org/abs/2604.02319">pre-print</a> on routing across models to improve sample diversity in open-ended generation. <br />
+    <li><i>February 2026: </i> New <a href="https://arxiv.org/abs/2602.21136">pre-print</a> with the SALT Lab on adaptive semi-structured interviewing for qualitative insight discovery. <br />
     <li><i>January 2026: </i> Our paper on LLM <a href="https://arxiv.org/abs/2504.09389">novelty</a> will appear at ICLR 2026, see you in Brazil! <br />
     <li><i>November 2025: </i> Second <a href="https://arxiv.org/abs/2511.09310">pre-print</a> in collaboration with the <a href="https://mj-storytelling.github.io/">Midjourney Storytelling Lab</a>, understanding the literary taste of users in a data-driven way. <br />
-    <li><i>September 2025: </i> Moved to Stanford to join Diyi's lab! <br />
+    <li><i>September 2025: </i> Moved to Stanford to join Diyi's SALT lab! <br />
     <li><i>July 2025: </i> My AI2 internship work on creating schemas to compare research papers was accepted to EMNLP Findings. Check out the paper <a href="https://arxiv.org/abs/2507.19521">here</a>. <br />
     <li><i>May 2025: </i>My internship work from Adobe got accepted to ACL 2025. Check out the paper <a href="https://arxiv.org/abs/2505.21859"> here </a>. I think it has cool implications for how we should think and design agentic LLM pipelines.<br />
     <li><i>April 2025: </i>Passed my thesis defense, still can't quite believe it!<br />
@@ -30,5 +32,4 @@ Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV
     <li><i>July 2023: </i> I presented our <a href="https://arxiv.org/abs/2303.04562">work</a> on extrapolative generation with iterative refinement at ICML 2023. </li><br />
     <li><i>July 2023: </i> I was the co-chair for the ACL 2023 <a href="https://acl2023-srw.github.io/">Student Research Workshop</a> along with <a href="http://gvallejo.co/">Gisela Vallejo</a> and <a href="https://franxyao.github.io/">Yao Fu</a>. </li><br />
 </ul>
-
 
