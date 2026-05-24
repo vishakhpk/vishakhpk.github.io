@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offloading Score: Measuring AI Reliance through Counterfactual Workflows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --bg-soft: #f9fafb;
+      --accent: #2563eb;
+      --ai-bg: #E6F4F1;
+      --ai-border: #1F6F67;
+      --ai-text: #1F6F67;
+      --ai-hover: #cde8e2;
+
+      --label-planning-bg: #ede9fe;  --label-planning-text: #5b21b6;
+      --label-execution-bg: #dbeafe; --label-execution-text: #1d4ed8;
+      --label-feedback-bg: #cffafe;  --label-feedback-text: #0e7490;
+      --label-control-bg: #f3f4f6;   --label-control-text: #374151;
+      --label-reuse-bg: #fef3c7;     --label-reuse-text: #b45309;
+      --label-adapt-bg: #dcfce7;     --label-adapt-text: #15803d;
+      --label-pushback-bg: #ffedd5;  --label-pushback-text: #c2410c;
+      --label-reject-bg: #ffe4e6;    --label-reject-text: #be123c;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 64px 0 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .authors {
+      font-size: 14.5px;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.9;
+    }
+    .authors a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .authors a:hover { color: var(--accent); text-decoration: underline; }
+    .authors sup { color: var(--muted); font-size: 10px; }
+
+    .affiliation {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    .affiliation sup { font-size: 10px; }
+
+    .link-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 0; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 16px; border-radius: 999px;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none; border: 1.5px solid var(--border);
+      color: var(--text); background: var(--bg);
+      transition: all 0.15s; cursor: pointer; font-family: inherit;
+    }
+    .btn:hover { border-color: #9ca3af; background: var(--bg-soft); }
+    .btn-primary { background: var(--text); color: white; border-color: var(--text); }
+    .btn-primary:hover { background: #374151; border-color: #374151; color: white; }
+    .btn-muted { color: var(--muted); }
+
+    /* ── TL;DR ── */
+    .tldr-block {
+      margin: 36px 0 0;
+      padding: 20px 24px;
+      background: var(--ai-bg);
+      border-radius: 8px;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .tldr-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ai-text);
+      margin-bottom: 6px;
+    }
+    .tldr-block p { color: #0f4f49; }
+
+    /* ── Q&A accordion ── */
+    .qa-list {
+      margin-top: 0;
+    }
+
+    .qa-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .qa-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: opacity 0.15s;
+    }
+    .qa-question:hover { opacity: 0.75; }
+
+    .q-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+      flex: 1;
+    }
+
+    /* Icon: circle with ? or lightbulb */
+    .q-icon {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--muted);
+      background: var(--bg);
+    }
+
+    .qa-item.open .q-icon {
+      background: var(--ai-bg);
+      border-color: var(--ai-border);
+      color: var(--ai-text);
+    }
+
+    .icon-q, .icon-bulb { transition: opacity 0.15s; }
+    .icon-bulb { display: none; }
+    .qa-item.open .icon-q { display: none; }
+    .qa-item.open .icon-bulb { display: block; }
+
+    /* Answer panel */
+    .qa-answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s ease;
+    }
+    .qa-item.open .qa-answer {
+      max-height: 4000px;
+    }
+
+    .qa-answer-inner {
+      padding: 0 0 32px 0;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .qa-answer-inner p { margin-bottom: 16px; }
+    .qa-answer-inner p:last-child { margin-bottom: 0; }
+
+    .qa-answer-inner strong { color: var(--text); font-weight: 600; }
+    .qa-answer-inner em { font-style: italic; }
+
+    .qa-answer-inner a { color: var(--accent); }
+
+    /* Inline figures */
+    .answer-figure {
+      margin: 24px 0;
+    }
+    .answer-figure img {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .answer-figure figcaption {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* Devil's advocate sub-questions */
+    .devils-intro {
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 1.4rem;
+    }
+    .devils-qa {
+      border-left: 3px solid var(--ai-text);
+      padding-left: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .devils-qa:last-child { margin-bottom: 0; }
+    .devils-q {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    /* Formula inline */
+    .formula-inline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      margin: 20px 0;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      flex-wrap: wrap;
+    }
+    .formula-inline .formula-expr {
+      font-size: 1.2rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .formula-frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.2;
+    }
+    .formula-num, .formula-den { font-size: 0.9rem; font-weight: 500; }
+    .formula-bar { width: 100%; height: 1.5px; background: var(--text); margin: 3px 0; }
+    .formula-note { font-size: 13px; color: var(--muted); }
+
+    /* Labels */
+    .label {
+      display: inline-block; font-size: 12px; font-weight: 500;
+      padding: 2px 9px; border-radius: 999px;
+    }
+    .label-planning  { background: var(--label-planning-bg);  color: var(--label-planning-text); }
+    .label-execution { background: var(--label-execution-bg); color: var(--label-execution-text); }
+    .label-feedback  { background: var(--label-feedback-bg);  color: var(--label-feedback-text); }
+    .label-control   { background: var(--label-control-bg);   color: var(--label-control-text); }
+    .label-reuse     { background: var(--label-reuse-bg);     color: var(--label-reuse-text); }
+    .label-adapt     { background: var(--label-adapt-bg);     color: var(--label-adapt-text); }
+    .label-pushback  { background: var(--label-pushback-bg);  color: var(--label-pushback-text); }
+    .label-reject    { background: var(--label-reject-bg);    color: var(--label-reject-text); }
+
+    /* ── Interactive workflow examples ── */
+    .examples-note {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .example-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 9px 20px; font-size: 13.5px; font-weight: 500;
+      color: var(--muted); background: transparent; border: none;
+      border-bottom: 2px solid transparent; cursor: pointer;
+      transition: all 0.15s; margin-bottom: -1px; font-family: inherit;
+    }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .example-context {
+      font-size: 13.5px; color: var(--muted);
+      margin-bottom: 14px; font-style: italic;
+    }
+    .example-context strong { color: var(--text); font-style: normal; }
+
+    .workflow-container {
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .workflow-header {
+      background: var(--bg-soft); border-bottom: 1px solid var(--border);
+      padding: 9px 14px; font-size: 12.5px; color: var(--muted);
+    }
+    .workflow-header strong { color: var(--text); font-weight: 600; }
+
+    .workflow-step { border-bottom: 1px solid var(--border); }
+    .workflow-step:last-child { border-bottom: none; }
+
+    .step-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 11px 14px; font-size: 13.5px; line-height: 1.5;
+    }
+    .step-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0; margin-top: 1px;
+    }
+    .human-step .step-icon { background: #f3f4f6; color: #6b7280; }
+    .ai-step .step-icon    { background: var(--ai-bg); color: var(--ai-text); border: 1px solid #a8d5cc; }
+
+    .step-body { flex: 1; min-width: 0; }
+    .step-text { display: block; margin-bottom: 5px; }
+    .step-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+
+    .ai-step { background: var(--ai-bg); cursor: pointer; transition: background 0.15s; }
+    .ai-step:hover { background: var(--ai-hover); }
+    .ai-step .step-text { color: #0f4f49; font-weight: 500; }
+
+    .expand-hint {
+      font-size: 11.5px; color: var(--ai-text); font-weight: 500;
+      display: inline-flex; align-items: center; gap: 3px; margin-left: 2px;
+    }
+    .expand-hint::before { content: "▶"; font-size: 8px; }
+    .ai-step.open .expand-hint::before { content: "▼"; }
+
+    .cf-panel {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #f4fbf9;
+      border-top: 0px dashed var(--ai-border);
+    }
+    .cf-panel.open {
+      max-height: 1000px;
+      border-top-width: 1px;
+      padding: 14px 14px 14px 48px;
+    }
+    .cf-header {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px;
+    }
+    .cf-steps { list-style: none; }
+    .cf-step {
+      font-size: 13px; color: #374151; line-height: 1.55;
+      padding: 4px 0 4px 12px;
+      border-left: 2px solid #a8d5cc; margin-bottom: 4px;
+    }
+    .cf-step:last-child { margin-bottom: 0; }
+    .cf-summary {
+      display: inline-block; margin-top: 12px;
+      font-size: 12px; font-weight: 600; color: var(--ai-text);
+      background: var(--ai-bg); border: 1px solid #a8d5cc;
+      padding: 3px 10px; border-radius: 4px;
+    }
+
+    /* ── Cluster callouts in Q5 ── */
+    .cluster-list { margin: 16px 0; display: flex; flex-direction: column; gap: 12px; }
+    .cluster-card {
+      padding: 14px 18px;
+      border-radius: 8px;
+      border-left: 3px solid;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+    .cluster-card .cluster-name {
+      font-weight: 600; font-size: 14px; margin-bottom: 4px;
+    }
+    .cluster-card p { margin: 0; color: #374151; font-size: 14px; }
+    .cluster-over    { background: #fff1f2; border-color: #f43f5e; }
+    .cluster-over    .cluster-name { color: #be123c; }
+    .cluster-approp  { background: var(--ai-bg); border-color: var(--ai-border); }
+    .cluster-approp  .cluster-name { color: var(--ai-text); }
+    .cluster-low     { background: #f9fafb; border-color: #9ca3af; }
+    .cluster-low     .cluster-name { color: #374151; }
+
+    /* ── BibTeX ── */
+    .citation-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .citation-section h2 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .bibtex-wrap { position: relative; }
+    .bibtex {
+      background: var(--bg-soft); border: 1px solid var(--border);
+      border-radius: 6px; padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px; line-height: 1.75; color: #374151;
+      overflow-x: auto; white-space: pre;
+    }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-size: 11.5px; font-weight: 500; color: var(--muted);
+      background: white; border: 1px solid var(--border);
+      padding: 3px 9px; border-radius: 4px; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .copy-btn:hover { color: var(--text); border-color: #9ca3af; }
+
+    footer {
+      text-align: center; padding: 24px;
+      font-size: 12.5px; color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      .q-text { font-size: 0.97rem; }
+    }
+  </style>
+</head>
+<body>
+<main>
+
+  <!-- ── Header ── -->
+  <header>
+    <h1>Offloading Score: Measuring AI Reliance<br>through Counterfactual Workflows</h1>
+
+    <div class="authors">
+      <a href="https://vishakhpk.github.io/">Vishakh Padmakumar</a><sup>1</sup>,&ensp;
+      <a href="https://lujainibrahim.com/">Lujain Ibrahim</a><sup>2</sup>,&ensp;
+      <a href="https://zorazrw.github.io/">Zora Wang</a><sup>3</sup>,&ensp;
+      <a href="https://jennjwang.github.io/">Jennifer Wang</a><sup>1</sup>,&ensp;
+      <a href="http://qveraliao.com/">Q. Vera Liao</a><sup>4</sup>,&ensp;
+      <a href="https://cs.stanford.edu/~diyiy/">Diyi Yang</a><sup>1</sup>
+    </div>
+    <div class="affiliation">
+      <sup>1</sup>&thinsp;Stanford University &ensp;
+      <sup>2</sup>&thinsp;University of Oxford &ensp;
+      <sup>3</sup>&thinsp;Carnegie Mellon University &ensp;
+      <sup>4</sup>&thinsp;University of Michigan
+    </div>
+
+    <div class="link-buttons">
+      <a href="#" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
+        Paper
+      </a>
+      <a href="#" class="btn btn-muted">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        Code <span style="font-size:11px;opacity:0.55">(coming soon)</span>
+      </a>
+      <a href="#citation" class="btn">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        BibTeX
+      </a>
+    </div>
+
+    <div class="tldr-block">
+      <div class="tldr-label">TL;DR</div>
+      <p>We introduce a way to measure AI reliance by looking at where cognitive effort goes in a real workflow. Using a controlled user study, we show that this measure captures shifts in reliance under time pressure, and helps reveal different patterns in how people work with AI tools.</p>
+    </div>
+  </header>
+
+  <!-- ── Q&A ── -->
+  <div class="qa-list">
+
+    <!-- Q1 -->
+    <div class="qa-item open" id="q1">
+      <button class="qa-question" onclick="toggleQ('q1')">
+        <span class="q-text">Why is measuring AI reliance so hard?</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+          <!--- <p>When two developers submit identical code, existing tools can't tell you that one spent four hours thinking through every design decision while the other pasted the problem into an AI chat and hit send.</p> --->
+          <p>A lot of existing work treats reliance as a fairly simple event: did the user accept the AI's suggestion, or did they reject it? That framing made sense for earlier AI systems, where the tool produced a recommendation and the user made a decision around it. But that is not really how people use contemporary AI tools. These interactions are conversational, multi-turn, and often woven through the whole task. Two users can end up with the same amount of AI-generated code, but get there in very different ways: one might break the task down, ask for help on sub-components, and check each step; another might hand the whole problem to the model at the start. A usage count makes these look much closer than they are.</p>
+          <p>Self-reports give us a bit more texture, but they come with their own problems: they are subjective, noisy, and hard to collect every time someone uses a tool.</p>
+          <p>What gets lost in both approaches is the distribution of effort over the interaction itself.</p>
+
+          <figure class="answer-figure">
+            <img src="figures/fig1_v2.2.png" alt="Two users complete the same task with similar outputs, but one offloads far more cognitive work to the AI than the other">
+            <figcaption>Two developers can produce similar outputs while relying on AI very differently. One decomposes the task, queries the model for subcomponents, and verifies each step; the other hands the whole problem to the AI. The offloading score is designed to capture this difference.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qa-item open" id="q2">
+      <button class="qa-question" onclick="toggleQ('q2')">
+        <span class="q-text">What would a better measure look like?</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+          <p>At some point, the thing we wanted to measure was not just whether the AI was used, but how much <strong>cognitive effort</strong> had moved from the person to the tool.</p>
+          <p>So instead of asking only whether the user accepted an output, we ask a more counterfactual question: <em>how much work would this person have had to do if the tool had not been there?</em> If the answer is "a lot more," then the interaction involved high reliance. If the answer is "roughly the same amount," then the tool was present, but not carrying much of the cognitive load.</p>
+          <p>We make this concrete by looking at the workflow step by step. Whenever a user seeks AI assistance, we estimate what an 'average' user would have had to do to reach that same sub-goal without the tool. The steps saved, relative to the full human-only counterfactual, give us the <strong>offloading score</strong>.</p>
+          <p>The score is only one part of the picture. We also label each AI-assisted step to understand <em>how</em> the reliance shows up: what kind of cognitive work is being offloaded — <span class="label label-planning">Planning</span> <span class="label label-execution">Execution</span> <span class="label label-feedback">Feedback</span> <span class="label label-control">Control</span> — and how the user treats the AI's output — <span class="label label-reuse">Directly Reuse</span> <span class="label label-adapt">Adapt &amp; Apply</span> <span class="label label-pushback">Pushback</span> <span class="label label-reject">Reject</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qa-item open" id="q3">
+      <button class="qa-question" onclick="toggleQ('q3')">
+        <span class="q-text">How do you actually calculate the offloading score?</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+          <p>In practice, the calculation has three moving parts.</p>
+          <p>First, we record a developer's session — screen, keystrokes, clicks — and automatically <a href="https://github.com/zorazrw/workflow-induction-toolkit/tree/main">induce a step-by-step workflow</a> from it. Each step is meant to capture a meaningful unit of progress: <em>"sent prompt asking AI to design the database schema"</em>, or <em>"manually debugged CSS layout issues."</em></p>
+          <p>Second, for each AI-assisted step, we simulate what an average developer might have done without the tool. This is not a full alternate universe for the whole task. It is a <strong>short-horizon simulation</strong>: what would it take to reach this same local sub-goal?</p>
+          <p>Third, we turn that into a score:</p>
+
+          <div class="formula-inline">
+            <div class="formula-expr">
+              Offloading Score&ensp;=&ensp;
+              <span class="formula-frac">
+                <span class="formula-num"><em>m</em> − <em>n</em></span>
+                <span class="formula-bar"></span>
+                <span class="formula-den"><em>m</em></span>
+              </span>
+            </div>
+            <div class="formula-note"><em>n</em> = observed steps &nbsp;·&nbsp; <em>m</em> = counterfactual steps &nbsp;·&nbsp; range [0, 1]</div>
+          </div>
+
+          <p>A score of 0 means the observed workflow did not save steps relative to the human-only version. A score close to 1 means most of the work for those sub-goals was effectively offloaded. For a concrete sense of what this looks like, see the <a href="#examples">examples below</a>.</p>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qa-item open" id="q4">
+      <button class="qa-question" onclick="toggleQ('q4')">
+        <span class="q-text">How do you know it actually measures reliance?</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+          <p>We validate the <em>offloading score</em> through a user study. The basic test is simple: prior work suggests that <strong>time pressure increases reliance on external tools.</strong> So if our measure is capturing the right thing, it should move in that direction when people are rushed.</p>
+          <p>We ran a controlled study with 40 experienced developers. Everyone worked on programming tasks involving functional web apps, with the same tools available. The main difference was time: half had 1 hour, and half had 4 hours.</p>
+          <p>The offloading score was significantly higher in the time-pressured group (+43%, <em>p</em> = 0.018). Two common baselines — the fraction of AI-generated code retained, and self-reported cognitive load — did not significantly separate the two conditions.</p>
+          <p> We also check the pieces that make the score work: whether the counterfactual simulations are plausible, and whether the human and LLM annotations for process and output-use labels are reliable.</p>
+
+          <figure class="answer-figure">
+            <img src="figures/boxplot_comparison_softened_v3.png" alt="Boxplot comparing offloading score and baselines across short and long conditions">
+            <figcaption>Comparison of different reliance measures across <em>short</em> (1 hr) and <em>long</em> (4 hr) conditions. The offloading score is significantly higher in the short condition (p = 0.018), matching the expected effect of time pressure. Baselines based on AI usage and self-reported cognitive load show more variance and do not significantly distinguish the conditions.</figcaption>
+          </figure>
+
+          <p>Over 85% of the generated counterfactual steps were rated as plausible by participants. LLM-as-judge annotations for the process and output-use labels matched human annotators at 80–81% agreement.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qa-item open" id="q5">
+      <button class="qa-question" onclick="toggleQ('q5')">
+        <span class="q-text">Does high reliance mean you're doing something wrong?</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+          <p>Not necessarily. This is the part that matters: reliance is not automatically good or bad. The offloading score tells us <em>how much</em> effort was offloaded. Whether that is desirable depends on what the user was trying to get out of the interaction.</p>
+          <p>To see this more clearly, we combined the offloading score with a measure of <strong>system recall</strong>. After the task, we asked participants questions about the system they had built: design decisions, implementation details, and how the pieces fit together.</p>
+
+          <div class="cluster-list">
+            <div class="cluster-card cluster-over">
+              <div class="cluster-name">Potential overreliance</div>
+              <p>High offloading score, low system recall. These users delegated heavily, but did not retain much understanding of what had been built. In interviews, several said they knew how to do the task themselves but used the tool out of habit or to move faster — and in some cases were not even aware of features the AI had quietly included.</p>
+            </div>
+            <div class="cluster-card cluster-approp">
+              <div class="cluster-name">Appropriate reliance</div>
+              <p>Moderate-to-high offloading score, high system recall. These users leaned on AI for things they did not already know how to do, but stayed engaged enough to understand the result. The tool seemed to function more like a learning scaffold than a shortcut. One participant described "not wanting to limit themselves to one line of thinking" and using the model in a back-and-forth planning loop.</p>
+            </div>
+            <div class="cluster-card cluster-low">
+              <div class="cluster-name">Lower reliance</div>
+              <p>Smaller offloading scores. In interviews, this often seemed less like a deliberate preference for independence and more like limited familiarity with what the tool could do. When shown examples of alternative workflows, several participants said they would have used the tool more if they had known.</p>
+            </div>
+          </div>
+
+          <figure class="answer-figure">
+            <img src="figures/recall_vs_reliance_with_trend_line.png" alt="Scatter plot of offloading score vs system recall">
+            <figcaption>System recall (y-axis) vs. offloading score (x-axis) across participants. The red line shows a linear fit after excluding the moderate-to-high reliance, high-recall cluster in green. Among the remaining users, higher offloading is more strongly associated with lower recall. The highlighted cluster shows a different pattern: substantial tool use while still maintaining understanding.</figcaption>
+          </figure>
+
+          <p>The offloading score is not meant to decide whether reliance is bad. It gives us a way to notice when cognitive effort has moved, and then ask what that movement meant in context.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end qa-list -->
+
+  <!-- ── Examples ── -->
+  <div class="qa-list">
+  <div class="qa-item open" id="examples">
+    <button class="qa-question" onclick="toggleQ('examples')">
+      <span class="q-text">Some examples</span>
+      <span class="q-icon">
+        <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+        <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+      </span>
+    </button>
+    <div class="qa-answer">
+    <div class="qa-answer-inner">
+    <p style="margin-bottom:20px;">Two moments from real, anonymized sessions in our user study. Each workflow contains a mix of human and AI-assisted steps. <strong style="color: var(--ai-text);">Click any highlighted step</strong> to see the human-only alternative we estimate for that moment.</p>
+
+    <div class="example-tabs">
+      <button class="tab-btn active" onclick="switchTab('ex1', event)">Example 1: Accepting Changes</button>
+      <button class="tab-btn" onclick="switchTab('ex2', event)">Example 2: Planning with AI</button>
+    </div>
+
+    <div class="tab-panel active" id="ex1">
+      <p class="example-context"><strong>Task:</strong> Build a web-based game with a mobile-responsive UI. The user has finished the core logic and is now trying to make the interface work on smaller screens.</p>
+      <div class="workflow-container">
+        <div class="workflow-header">Induced workflow &nbsp;·&nbsp; <strong>Offloading score: 0.53</strong></div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Review task requirements: ensure the app layout works on mobile screens.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Open the app in browser, resize to mobile viewport (~375px width), and identify layout issues in the Controls and Board components.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step ai-step" onclick="toggleStep(this)">
+          <div class="step-row">
+            <div class="step-icon">✦</div>
+            <div class="step-body">
+              <span class="step-text">(editing generation) Accept AI-suggested CSS/Controls/Board changes for responsive design via multiple "Accept all"/inline Accepts.</span>
+              <div class="step-meta">
+                <span class="label label-execution">Execution</span>
+                <span class="label label-reuse">Directly Reuse</span>
+                <span class="expand-hint">Click to see human alternative (9 steps)</span>
+              </div>
+            </div>
+          </div>
+          <div class="cf-panel">
+            <div class="cf-header">Without AI, this step would require:</div>
+            <ul class="cf-steps">
+              <li class="cf-step">Open the implementation plan / notes summarizing the mobile-responsiveness fixes and keep that window visible for reference.</li>
+              <li class="cf-step">Use VS Code search to find UI/layout sources — open index.css plus component files that contain the controls and board layout (e.g., Controls.tsx, Board.tsx, App.css).</li>
+              <li class="cf-step">Edit index.css to add mobile-targeted rules: add a <code>@media (max-width: 600px)</code> block that adjusts root spacing variables, sets the main container to column flow, and reduces paddings/margins.</li>
+              <li class="cf-step">Update controls component styles so the control group stacks vertically on small screens and buttons expand to 100% width within that breakpoint.</li>
+              <li class="cf-step">Adjust board/container styles to preserve aspect ratio on narrow viewports — set <code>max-width: 100%</code>, use responsive heights, and handle overflow.</li>
+              <li class="cf-step">Run the dev server and open the app in browser; use DevTools Device Toolbar at common mobile widths (375×667, 414×896) to inspect the layout.</li>
+              <li class="cf-step">Interact with the board and controls in responsive DevTools view, noting issues; iterate on CSS edits until controls and board behave correctly on small screens.</li>
+              <li class="cf-step">Run linting and tests (<code>npm run lint</code>, <code>npm test</code>) and fix any failures introduced.</li>
+              <li class="cf-step">Create a descriptive commit and push the branch.</li>
+            </ul>
+            <div class="cf-summary">1 AI step → 9 human steps &nbsp;·&nbsp; saves ~89% of effort at this moment</div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Test the responsive layout in browser DevTools at multiple mobile widths; verify board and controls render correctly.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Run <code>npm test</code> to check for regressions and confirm the build passes.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ex2">
+      <p class="example-context"><strong>Task:</strong> Build a recipe finder app using the Spoonacular API. The user needs to add a "Generate" button that fetches recipes and displays them in the app.</p>
+      <div class="workflow-container">
+        <div class="workflow-header">Induced workflow &nbsp;·&nbsp; <strong>Offloading score: 0.47</strong></div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Review task specification: add a recipe search feature with a "Generate" button connected to the Spoonacular API.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step ai-step" onclick="toggleStep(this)">
+          <div class="step-row">
+            <div class="step-icon">✦</div>
+            <div class="step-body">
+              <span class="step-text">(reading generation) Ask VS Code AI how to add a generate button and recipe list using the API key; read its implementation plan.</span>
+              <div class="step-meta">
+                <span class="label label-planning">Planning</span>
+                <span class="label label-adapt">Adapt &amp; Apply</span>
+                <span class="expand-hint">Click to see human alternative (7 steps)</span>
+              </div>
+            </div>
+          </div>
+          <div class="cf-panel">
+            <div class="cf-header">Without AI, this step would require:</div>
+            <ul class="cf-steps">
+              <li class="cf-step">Open the Spoonacular API docs and locate the recipe search endpoint. Note required query parameters, response format, and how the API key is passed.</li>
+              <li class="cf-step">In VS Code open App.jsx and decide where to add UI and state: plan to add a "Generate" button, a search input, and a recipe list.</li>
+              <li class="cf-step">Add React state hooks: <code>recipes</code> (array), <code>loading</code> (boolean), <code>error</code> (string), and <code>query</code> (string).</li>
+              <li class="cf-step">Implement a <code>searchRecipes</code> function: set loading true; build the request URL using the API key from env; call <code>fetch(url)</code>, await <code>response.json()</code>, set recipes; catch errors.</li>
+              <li class="cf-step">Wire the UI: add onChange to the input, add a Generate button with <code>onClick={searchRecipes}</code>, and add conditional rendering for loading, error, and a mapped list of recipe cards.</li>
+              <li class="cf-step">Save App.jsx and restart the dev server so that environment changes are picked up.</li>
+              <li class="cf-step">Open the app in browser, enter a query, click Generate, watch the network tab, and confirm recipes render correctly.</li>
+            </ul>
+            <div class="cf-summary">1 AI step → 7 human steps &nbsp;·&nbsp; saves ~86% of effort at this moment</div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Open App.jsx and begin implementing the recipe search feature following the plan.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Enter a test query, click Generate, and check the network tab to confirm the API request and response format.</span></div>
+          </div>
+        </div>
+        <div class="workflow-step human-step">
+          <div class="step-row">
+            <div class="step-icon">👤</div>
+            <div class="step-body"><span class="step-text">Fix API key configuration in <code>.env.local</code> if needed; restart dev server and verify recipes render correctly.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- end qa-answer-inner -->
+    </div><!-- end qa-answer -->
+  </div><!-- end qa-item examples -->
+  </div><!-- end qa-list -->
+
+  <!-- ── Devil's Advocate ── -->
+  <div class="qa-list" style="margin-top: 2rem;">
+    <div class="qa-item open" id="devils-advocate">
+      <button class="qa-question" onclick="toggleQ('devils-advocate')">
+        <span class="q-text">To play our own devil's advocate</span>
+        <span class="q-icon">
+          <svg class="icon-q" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+          <svg class="icon-bulb" width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"/></svg>
+        </span>
+      </button>
+      <div class="qa-answer">
+        <div class="qa-answer-inner">
+
+          <p class="devils-intro">Any new measure should invite some skepticism. These are the concerns we think about most often. There is a lot more work to be done here, so please reach out if any of these directions are interesting to you.</p>
+
+          <div class="devils-qa">
+            <p class="devils-q">But what if the estimated counterfactual steps don't reflect how someone would solve the sub-task(s)?</p>
+            <p>We use human-only counterfactuals to approximate what an average developer would do to reach the same sub-goal without the tool. This is a reasonable place to be skeptical. We evaluate these counterfactuals using a dataset of workflows from prior work, and in our user study participants rated over 85% of generated counterfactual steps as plausible. We also expect this part of the method to improve as workflow induction, user modeling, and simulation methods get better.</p>
+          </div>
+
+          <div class="devils-qa">
+            <p class="devils-q">But how do you account for differences in work styles, shouldn't the counterfactual be personalized?</p>
+            <p>In principle, yes. A senior engineer and a junior developer might take very different paths to reach the same sub-goal without AI, and a single "average user" counterfactual will not capture all of that. We use a general counterfactual because it keeps the measure reusable across contexts, and because personalized workflows estimated from limited session history can be very noisy. But adapting the offloading score to individual baselines is an important next step.</p>
+          </div>
+
+          <div class="devils-qa">
+            <p class="devils-q">But what if this only works for coding tasks?</p>
+            <p>Our user study focuses on 40 experienced developers working on programming tasks, largely because coding is one of the places where AI agents are already widely used. But the framework itself is not specific to code. In principle, any setting where we can induce a workflow and estimate a human-only alternative could work. That still needs empirical validation.</p>
+          </div>
+
+          <div class="devils-qa">
+            <p class="devils-q">But what if cognitive effort is not always visible in on-screen actions?</p>
+            <p>Workflow steps only capture what is externally visible. A user might sit quietly thinking through a design before typing anything, and that effort will not appear in the trace. So the measure treats observable steps as a useful but imperfect proxy for cognitive effort. Our hope is that this still gives users a signal they can reflect on, and gives model developers a way to design incentives that reduce harmful forms of overreliance.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Citation ── -->
+  <div class="citation-section" id="citation">
+    <h2>Citation</h2>
+    <div class="bibtex-wrap">
+      <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+      <pre class="bibtex" id="bibtex-block">@article{padmakumar2026offloading,
+  title   = {Offloading Score: Measuring {AI} Reliance through
+             Counterfactual Workflows},
+  author  = {Padmakumar, Vishakh and Ibrahim, Lujain and Wang, Zora
+             and Wang, Jennifer and Liao, Q. Vera and Yang, Diyi},
+  note    = {Unpublished},
+  year    = {2026},
+}</pre>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <a href="https://vishakhpk.github.io/measuring-reliance/" style="color:inherit">vishakhpk.github.io/measuring-reliance</a> &ensp;·&ensp; 2026
+</footer>
+
+<script>
+  function toggleQ(id) {
+    const item = document.getElementById(id);
+    item.classList.toggle('open');
+  }
+
+  function switchTab(tabId, event) {
+    // Find the parent qa-answer-inner to scope the search
+    const btn = event.currentTarget;
+    const container = btn.closest('.qa-answer-inner');
+    container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    container.querySelector('#' + tabId).classList.add('active');
+  }
+
+  function toggleStep(stepEl) {
+    const panel = stepEl.querySelector('.cf-panel');
+    const hint  = stepEl.querySelector('.expand-hint');
+    const isOpen = panel.classList.contains('open');
+    if (isOpen) {
+      panel.classList.remove('open');
+      stepEl.classList.remove('open');
+      const match = hint.textContent.match(/\((\d+ steps?)\)/);
+      if (match) hint.textContent = `Click to see human alternative (${match[1]})`;
+    } else {
+      panel.classList.add('open');
+      stepEl.classList.add('open');
+      const match = hint.textContent.match(/\((\d+ steps?)\)/);
+      if (match) hint.textContent = `Hide human alternative (${match[1]})`;
+    }
+  }
+
+  function toggleBibtex() {
+    const section = document.getElementById('citation');
+    const isHidden = section.style.display === 'none';
+    section.style.display = isHidden ? 'block' : 'none';
+    if (isHidden) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function copyBibtex() {
+    const text = document.getElementById('bibtex-block').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+</script>
+</body>
+</html>
