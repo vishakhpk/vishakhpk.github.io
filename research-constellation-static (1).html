@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Research Constellation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&amp;display=swap">
+
+<!-- Standalone research map. Paper content and themes are defined in
+     PAPERS and CLUSTERS; EXPORTED_LAYOUT stores the fixed arrangement. -->
+
+<style>
+  #rc-root, #rc-root * { box-sizing: border-box; }
+  #rc-root {
+    --rc-bg-1: #ffffff;
+    --rc-bg-2: #f3f5f9;
+    --rc-ink: #22262e;
+    --rc-muted: #6b7280;
+    --rc-faint: #98a0ac;
+    --rc-card: rgba(15,23,42,0.035);
+    --rc-border: rgba(15,23,42,0.09);
+    --rc-link: #008AFF;
+    --rc-link-hover: #0085A1;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--rc-ink);
+    max-width: 1000px;
+    margin: 0.5rem auto;
+    padding: 1.25rem clamp(1.25rem, 4vw, 2.75rem) 1rem;
+    border-radius: 22px;
+    background: radial-gradient(ellipse 90% 70% at 50% 12%, var(--rc-bg-1) 0%, var(--rc-bg-2) 100%);
+    box-shadow: 0 20px 50px -30px rgba(15,23,42,0.18), 0 0 0 1px rgba(15,23,42,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rc-title {
+    font-family: 'Lora', 'Times New Roman', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    margin: 0;
+  }
+  .rc-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    position: relative;
+    z-index: 30;
+    font-family: 'Lora', 'Times New Roman', serif;
+    font-size: clamp(0.8rem, 2.8vw, 1.125rem);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ---- filter dropdown ---- */
+  .rc-filter { position: relative; flex: 0 0 auto; }
+  .rc-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--rc-card);
+    border: 1px solid var(--rc-border);
+    color: var(--rc-ink);
+    font-size: 0.82rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .rc-filter-btn:hover { background: rgba(15,23,42,0.06); border-color: rgba(15,23,42,0.16); }
+  .rc-filter-btn .rc-chevron { font-size: 0.65rem; opacity: 0.7; transition: transform 0.2s; }
+  .rc-filter-btn[aria-expanded="true"] .rc-chevron { transform: rotate(180deg); }
+  .rc-filter-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #9aa5c0;
+    box-shadow: 0 0 5px currentColor;
+  }
+
+  .rc-filter-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+    min-width: 240px;
+    background: rgba(255,255,255,0.98);
+    border: 1px solid var(--rc-border);
+    border-radius: 14px;
+    padding: 0.4rem;
+    box-shadow: 0 18px 40px -16px rgba(15,23,42,0.25);
+    display: none;
+    backdrop-filter: blur(8px);
+  }
+  .rc-filter-panel.open { display: block; }
+  .rc-filter-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--rc-ink);
+    text-align: left;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .rc-filter-option:hover { background: rgba(15,23,42,0.05); }
+  .rc-filter-option.active { background: rgba(15,23,42,0.08); color: #000; }
+  .rc-filter-option .rc-count { color: var(--rc-faint); font-size: 0.72rem; }
+  .rc-filter-option.active .rc-count { color: var(--rc-muted); }
+  .rc-filter-option.rc-filter-divider {
+    border-top: 1px solid var(--rc-border);
+    margin-top: 0.3rem;
+    padding-top: 0.65rem;
+  }
+
+  /* ---- viz area ---- */
+  .rc-stage {
+    position: relative;
+    margin-top: 0.35rem;
+    z-index: 2;
+  }
+  .rc-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .rc-edge {
+    stroke: #a7afc2;
+    stroke-opacity: 0;
+    stroke-width: 1;
+    transition: stroke-opacity 0.35s ease, stroke-width 0.25s ease, stroke 0.25s ease;
+    fill: none;
+  }
+  .rc-edge-hit {
+    stroke: transparent;
+    stroke-width: 14px;
+    pointer-events: none;
+    cursor: pointer;
+    fill: none;
+  }
+  #rc-root.rc-explore .rc-edge-hit { pointer-events: stroke; }
+  .rc-node-halo {
+    fill: currentColor;
+    opacity: 0.16;
+    transition: opacity 0.35s ease, r 0.35s ease;
+  }
+  .rc-node-core {
+    stroke: rgba(255,255,255,0.9);
+    stroke-width: 1.25;
+    transition: opacity 0.35s ease, r 0.35s ease, filter 0.35s ease;
+    cursor: pointer;
+  }
+  .rc-node-group { opacity: 1; transition: opacity 0.35s ease; }
+  .rc-node-group.rc-twinkle .rc-node-core { animation: rc-twinkle 4.5s ease-in-out infinite; }
+  @keyframes rc-twinkle {
+    0%, 100% { opacity: 0.86; }
+    50% { opacity: 1; }
+  }
+
+  /* ---- tooltip ---- */
+  .rc-tooltip {
+    position: fixed;
+    z-index: 50;
+    max-width: 280px;
+    background: rgba(255,255,255,0.98);
+    border: 1px solid rgba(15,23,42,0.08);
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--rc-ink);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 16px 36px -18px rgba(15,23,42,0.35);
+    backdrop-filter: blur(6px);
+  }
+  .rc-tooltip.show { opacity: 1; transform: translateY(0); }
+  .rc-tooltip-cluster {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+  .rc-tooltip-title { font-weight: 600; margin: 0 0 0.3rem; color: #16181d; }
+  .rc-tooltip-tldr { color: var(--rc-muted); margin: 0 0 0.45rem; }
+  .rc-tooltip-meta { color: var(--rc-faint); font-size: 0.72rem; margin: 0; }
+
+  .rc-tooltip-edge-themes { color: var(--rc-muted); margin: 0 0 0.55rem; }
+  .rc-tooltip-edge-pair { display: flex; flex-direction: column; gap: 0.4rem; }
+  .rc-tooltip-edge-paper {
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    color: #23262d;
+    text-decoration: none;
+    padding: 0.4rem 0.55rem;
+    background: rgba(15,23,42,0.04);
+    border-radius: 8px;
+    transition: background 0.15s ease;
+  }
+  .rc-tooltip-edge-paper:hover { background: rgba(15,23,42,0.08); }
+  .rc-tooltip-edge-paper small { display: block; color: var(--rc-faint); font-size: 0.68rem; margin-top: 2px; }
+
+  /* ---- legend ---- */
+  .rc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem 0.6rem;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .rc-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    color: var(--rc-muted);
+    font-family: 'Lora', 'Times New Roman', serif;
+    line-height: 1.4;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 4px 6px;
+    cursor: pointer;
+    text-align: left;
+    max-width: 100%;
+  }
+  .rc-legend-item:hover { background: var(--rc-card); }
+  .rc-legend-item[aria-pressed="true"] {
+    background: var(--rc-card);
+    border-color: currentColor;
+  }
+  .rc-legend-item:focus-visible {
+    outline: 2px solid var(--rc-link);
+    outline-offset: 2px;
+  }
+  .rc-legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    box-shadow: 0 0 5px currentColor;
+    flex: none;
+  }
+
+  @media (max-width: 760px) {
+    .rc-legend-item { font-size: 1.125rem; min-height: 44px; }
+  }
+  @media (max-width: 560px) {
+    .rc-title { font-size: 1.125rem; }
+    .rc-filter-panel { right: 0; left: auto; }
+    .rc-filter-btn { font-size: 0.75rem; padding: 0.5rem; gap: 0.3rem; }
+  }
+</style>
+</head>
+<body style="margin:0; background:transparent;">
+
+<div id="rc-root">
+  <h2 class="rc-title">View work by cluster:</h2>
+  <div class="rc-legend" id="rc-legend"></div>
+  <div class="rc-controls">
+    <span>You can also view papers tagged by:</span>
+      <div class="rc-filter">
+        <button class="rc-filter-btn" id="rc-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+          <span class="rc-filter-dot" id="rc-filter-dot"></span>
+          <span id="rc-filter-label">All papers</span>
+          <span class="rc-chevron">▾</span>
+        </button>
+        <div class="rc-filter-panel" id="rc-filter-panel" role="listbox"></div>
+      </div>
+  </div>
+
+  <div class="rc-stage">
+    <svg class="rc-svg" id="rc-svg" viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid meet">
+      <g id="rc-edges"></g>
+      <g id="rc-nodes"></g>
+    </svg>
+  </div>
+</div>
+
+<div class="rc-tooltip" id="rc-tooltip">
+  <div id="rc-tt-node-content">
+    <div class="rc-tooltip-cluster" id="rc-tt-cluster"></div>
+    <p class="rc-tooltip-title" id="rc-tt-title"></p>
+    <p class="rc-tooltip-tldr" id="rc-tt-tldr"></p>
+    <p class="rc-tooltip-meta" id="rc-tt-meta"></p>
+  </div>
+  <div id="rc-tt-edge-content" style="display:none">
+    <div class="rc-tooltip-cluster">Connection</div>
+    <p class="rc-tooltip-edge-themes" id="rc-tt-edge-themes"></p>
+    <div class="rc-tooltip-edge-pair">
+      <a class="rc-tooltip-edge-paper" id="rc-tt-edge-a" href="#" target="_blank" rel="noopener"></a>
+      <a class="rc-tooltip-edge-paper" id="rc-tt-edge-b" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ============================== DATA ============================== */
+
+  // Replaced by "Export static copy" with the on-screen positions at export
+  // time. Left null in the authored/live file — do not hand-edit this line,
+  // it's a find-and-replace target (see EXPORT_PLACEHOLDER below).
+  var EXPORTED_LAYOUT = {"llms-as-oracles":{"x":527.15,"y":388.2},"offloading-score":{"x":536.54,"y":335.95},"overreliance-position":{"x":568.06,"y":378.93},"swe-chat":{"x":330.2,"y":444.41},"router-diversity":{"x":302.25,"y":128.82},"sparkme":{"x":429.88,"y":358.62},"novelty":{"x":507.9,"y":159.78},"literarytaste":{"x":243.96,"y":289.65},"schema-litreview":{"x":390.61,"y":379.42},"content-selection":{"x":382.83,"y":231.51},"whose-boat":{"x":433.02,"y":251.48},"eval-diversity-quality":{"x":385.8,"y":95.5},"posttrain-diverse-writing":{"x":260.94,"y":160.8},"struggle-search":{"x":788.91,"y":223.1},"beyond-binary":{"x":394.43,"y":282.48},"writing-diversity":{"x":337.51,"y":173.72},"creativity-support":{"x":217.39,"y":346.57},"ood-deductive":{"x":714.18,"y":192.2},"self-consistency-failures":{"x":740.55,"y":271.56},"extrapolative-gen":{"x":492.3,"y":107.48},"reward-gaming":{"x":703.27,"y":109.82},"dialogue-context":{"x":687.77,"y":259.58},"debate-supervise":{"x":671.78,"y":330.3},"poem-instruction":{"x":299.88,"y":344.35},"caption-rewriting":{"x":251.12,"y":398.25},"task-transferability":{"x":600.26,"y":130.77},"quality":{"x":374.04,"y":424.34},"two-turn-debate":{"x":718.22,"y":306.47},"bbq":{"x":430.05,"y":411.91},"extract-select-rewrite":{"x":654.54,"y":185.74},"unsup-summarization":{"x":600.03,"y":188.99},"political-text":{"x":480.82,"y":489.79},"disinformation":{"x":562.8,"y":490.58},"image-retrieval":{"x":726.42,"y":410.11}};
+
+  var CLUSTERS = [
+    { id: "diversity",      label: "Diversity",                     color: "#4A90C2" },
+    { id: "novelty",        label: "Novelty",                       color: "#C9A227" },
+    { id: "cocreativity",   label: "Human–AI Co-Creativity",        color: "#D98A4A" },
+    { id: "personalization",label: "Personalization",               color: "#B0559C" },
+    { id: "reasoning",      label: "Reasoning & Model Behavior",    color: "#5FA873" },
+    { id: "tools",          label: "Research Tools & Datasets",     color: "#9B72C4" },
+    { id: "early",          label: "Uncategorized",                 color: "#7C8797" },
+    { id: "overreliance",   label: "Overreliance on AI",            color: "#3FA7A0" }
+  ];
+
+  // Controls two things: (1) legend display order (first = shown first),
+  // and (2) which row of the diagram each theme's anchor sits in — the
+  // first 4 ids anchor along the top of the constellation, the last 4
+  // along the bottom (see layoutClusterRow() below).
+  var LEGEND_ORDER = [
+    "diversity", "novelty", "overreliance", "reasoning",
+    "cocreativity", "personalization", "tools", "early"
+  ];
+
+  var PAPERS = [
+    {
+      id: "llms-as-oracles", title: "LLMs as Oracles: Reliance on LLMs for Subjective Personal Questions",
+      authors: "Myra Cheng, Lujain Ibrahim, Grace Liu, Michelle S. Lam, Vishakh Padmakumar, Nick Madibekov, Diyi Yang, Dan Jurafsky",
+      venue: "Preprint", year: 2026, link: "https://arxiv.org/abs/2609.14849",
+      tldr: "Studies how people treat LLMs as all-knowing oracles for subjective personal questions, measuring this reliance at scale.",
+      cluster: "overreliance", tags: ["over-reliance", "human-ai-collaboration", "evaluation"],
+      methods: false, evalData: true, mlConf: false, representative: false
+    },
+    {
+      id: "offloading-score", title: "Offloading Score: Measuring AI Reliance Through Counterfactual Workflows",
+      authors: "Vishakh Padmakumar, Lujain Ibrahim, Zora Zhiruo Wang, Jennifer Wang, Q. Vera Liao, Diyi Yang",
+      venue: "NeurIPS (Oral)", year: 2026, link: "https://arxiv.org/abs/2605.29392",
+      tldr: "Introduces \"offloading score,\" a simulation-based metric for how much cognitive effort users hand off to an AI tool, validated with a developer user study.",
+      cluster: "overreliance", tags: ["over-reliance", "human-ai-collaboration", "evaluation", "user-study", "simulation"],
+      methods: true, evalData: true, mlConf: true, representative: true
+    },
+    {
+      id: "overreliance-position", title: "Measuring and Mitigating Overreliance to Build Human-Compatible AI",
+      authors: "Lujain Ibrahim, Katherine M. Collins, Sunnie S. Y. Kim, Anka Reuel, Max Lamparth, Kevin Feng, Lama Ahmad, Prajna Soni, Alia El Kattan, Merlin Stein, Siddharth Swaroop, Vishakh Padmakumar, Ilia Sucholutsky, Andrew Strait, Diyi Yang, Q. Vera Liao, Umang Bhatt",
+      venue: "Preprint", year: 2025, link: "https://arxiv.org/abs/2509.08010",
+      tldr: "A position paper arguing that measuring and mitigating overreliance on LLMs should be central to LLM research and deployment.",
+      cluster: "overreliance", tags: ["over-reliance", "human-ai-collaboration", "position"],
+      methods: false, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "swe-chat", title: "SWE-chat: Coding Agent Interactions from Real Users in the Wild",
+      authors: "Joachim Baumann, Vishakh Padmakumar, Xiang Li, John Yang, Diyi Yang, Sanmi Koyejo",
+      venue: "COLM", year: 2026, link: "https://arxiv.org/abs/2604.20779",
+      tldr: "A large, growing dataset of real coding-agent sessions used to empirically characterize how developers actually use AI coding agents.",
+      cluster: "tools", tags: ["coding-agents", "dataset", "human-ai-collaboration", "analysis"],
+      methods: false, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "router-diversity", title: "No Single Best Model for Diversity: Learning a Router for Sample Diversity",
+      authors: "Yuhan Liu, Fangyuan Xu, Vishakh Padmakumar, Daphne Ippolito, Eunsol Choi",
+      venue: "COLM", year: 2026, link: "https://arxiv.org/abs/2604.02319",
+      tldr: "Learns to route across multiple LLMs to boost sample diversity in open-ended generation.",
+      cluster: "diversity", tags: ["diversity", "generation", "routing", "sampling"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "sparkme", title: "SparkMe: Adaptive Semi-Structured Interviewing for Qualitative Insight Discovery",
+      authors: "David Anugraha, Vishakh Padmakumar, Diyi Yang",
+      venue: "Preprint", year: 2026, link: "https://arxiv.org/abs/2602.21136",
+      tldr: "An adaptive interviewing system that reshapes its questions on the fly to surface deeper qualitative insight.",
+      cluster: "tools", tags: ["qualitative-research", "interviewing", "research-tools", "simulation"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "novelty", title: "Measuring LLM Novelty As The Frontier Of Original And High-Quality Output",
+      authors: "Vishakh Padmakumar, Chen Yueh-Han, Jane Pan, Valerie Chen, He He",
+      venue: "ICLR", year: 2026, link: "https://arxiv.org/abs/2504.09389",
+      tldr: "Defines novelty as a frontier of originality and quality, then measures how genuinely new LLM outputs really are.",
+      cluster: "novelty", tags: ["diversity", "novelty", "evaluation", "creativity"],
+      methods: false, evalData: true, mlConf: true, representative: true
+    },
+    {
+      id: "literarytaste", title: "LiteraryTaste: A Preference Dataset for Creative Writing Personalization",
+      authors: "John Joon Young Chung, Vishakh Padmakumar, Melissa Roemmele, Yi Wang, Yuqian Sun, Tiffany Wang, Shm Garanganao Almeda, Brett A. Halperin, Yuwen Lu, Max Kreminski",
+      venue: "Preprint", year: 2025, link: "https://arxiv.org/abs/2511.09310",
+      tldr: "A preference dataset capturing individual readers' literary taste, aimed at personalizing creative writing generation.",
+      cluster: "cocreativity", tags: ["creativity", "dataset", "personalization", "preference-learning"],
+      methods: false, evalData: true, mlConf: false, representative: false
+    },
+    {
+      id: "schema-litreview", title: "Intent-aware Schema Generation and Refinement for Literature Review Tables",
+      authors: "Vishakh Padmakumar, Joseph Chee Chang, Kyle Lo, Doug Downey, Aakanksha Naik",
+      venue: "EMNLP Findings", year: 2025, link: "https://aclanthology.org/2025.findings-emnlp.1274/",
+      tldr: "Generates and refines comparison-table schemas for literature reviews as a researcher's intent evolves.",
+      cluster: "tools", tags: ["literature-review", "content-synthesis", "research-tools", "schema"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "content-selection", title: "Principled Content Selection to Generate Diverse and Personalized Multi-Document Summaries",
+      authors: "Vishakh Padmakumar, Zichao Wang, David Arbour, Jennifer Healey",
+      venue: "ACL", year: 2025, link: "https://arxiv.org/abs/2505.21859",
+      tldr: "A principled content-selection method for multi-document summaries that stay diverse and personalized.",
+      cluster: "personalization", tags: ["diversity", "personalization", "summarization", "generation", "retrieval"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "whose-boat", title: "Whose Boat Does It Float? Improving Personalization in Preference Tuning via Inferred User Personas",
+      authors: "Nishant Balepur, Vishakh Padmakumar, Fumeng Yang, Shi Feng, Rachel Rudinger, Jordan Lee Boyd-Graber",
+      venue: "ACL", year: 2025, link: "https://aclanthology.org/2025.acl-long.168/",
+      tldr: "Infers the user personas behind preference judgments and uses them to tailor outputs, improving personalization in preference tuning.",
+      cluster: "personalization", tags: ["personalization", "preference-learning", "post-training"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "eval-diversity-quality", title: "Evaluating the Diversity and Quality of LLM Generated Content",
+      authors: "Alexander Shypula, Shuo Li, Botong Zhang, Vishakh Padmakumar, Kayo Yin, Osbert Bastani",
+      venue: "COLM", year: 2025, link: "https://arxiv.org/abs/2504.12522",
+      tldr: "Benchmarks how well current metrics actually capture the diversity–quality trade-off in LLM outputs.",
+      cluster: "diversity", tags: ["diversity", "evaluation", "generation"],
+      methods: true, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "posttrain-diverse-writing", title: "Modifying Large Language Model Post-Training for Diverse Creative Writing",
+      authors: "John Joon Young Chung, Vishakh Padmakumar, Melissa Roemmele, Yuqian Sun, Max Kreminski",
+      venue: "COLM", year: 2025, link: "https://openreview.net/forum?id=1Pmuw08LoM",
+      tldr: "Adapts LLM post-training objectives so models write more diverse, less homogenized creative text.",
+      cluster: "diversity", tags: ["creativity", "diversity", "post-training", "generation"],
+      methods: true, evalData: false, mlConf: true, representative: true
+    },
+    {
+      id: "struggle-search", title: "Transformers Struggle to Learn to Search",
+      authors: "Abulhair Saparov, Srushti Ajay Pawar, Shreyas Pimpalgaonkar, Nitish Joshi, Richard Yuanzhe Pang, Vishakh Padmakumar, Mehran Kazemi, Najoung Kim, He He",
+      venue: "ICLR", year: 2025, link: "https://arxiv.org/abs/2412.04703",
+      tldr: "Shows transformers systematically fail to learn a general search strategy, even with targeted training.",
+      cluster: "reasoning", tags: ["reasoning", "search", "transformers", "generalization"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "beyond-binary", title: "Beyond the Binary: Capturing Diverse Preferences with Reward Regularization",
+      authors: "Vishakh Padmakumar, Chuanyang Jin, Hannah Rose Kirk, He He",
+      venue: "Preprint", year: 2024, link: "https://arxiv.org/abs/2412.03822",
+      tldr: "Shows binary preference judgments miss real user disagreement, and proposes reward regularization to better capture diverse aggregate preferences.",
+      cluster: "personalization", tags: ["reward-modeling", "preference-learning", "personalization"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "writing-diversity", title: "Does Writing with Language Models Reduce Content Diversity?",
+      authors: "Vishakh Padmakumar, He He",
+      venue: "ICLR", year: 2024, link: "https://arxiv.org/abs/2309.05196",
+      tldr: "Finds that co-writing with an LLM measurably narrows the diversity of what people write.",
+      cluster: "diversity", tags: ["diversity", "human-ai-collaboration", "evaluation", "user-study"],
+      methods: false, evalData: true, mlConf: true, representative: true
+    },
+    {
+      id: "creativity-support", title: "Creativity Support in the Age of Large Language Models: An Empirical Study Involving Emerging Writers",
+      authors: "Tuhin Chakrabarty*, Vishakh Padmakumar*, Faeze Brahman, Smaranda Muresan",
+      venue: "ACM Creativity & Cognition", year: 2024, link: "https://dl.acm.org/doi/abs/10.1145/3635636.3656201",
+      tldr: "Interviews emerging writers on how LLM tools help — and sometimes hinder — their creative process.",
+      cluster: "cocreativity", tags: ["creativity", "hci", "human-ai-collaboration", "user-study", "qualitative-analysis"],
+      methods: false, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "ood-deductive", title: "Testing the General Deductive Reasoning Capacity of Large Language Models Using OOD Examples",
+      authors: "Abulhair Saparov, Richard Yuanzhe Pang, Vishakh Padmakumar, Nitish Joshi, Mehran Kazemi, Najoung Kim, He He",
+      venue: "NeurIPS", year: 2023, link: "https://arxiv.org/abs/2305.15269",
+      tldr: "Tests whether LLMs generalize deductive reasoning rules to out-of-distribution logical forms.",
+      cluster: "reasoning", tags: ["reasoning", "evaluation", "generalization", "dataset"],
+      methods: false, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "self-consistency-failures", title: "Two Failures of Self-Consistency in the Multi-Step Reasoning of LLMs",
+      authors: "Angelica Chen, Jason Phang, Alicia Parrish, Vishakh Padmakumar, Chen Zhao, Samuel R. Bowman, Kyunghyun Cho",
+      venue: "DMLR", year: 2023, link: "https://arxiv.org/abs/2305.14279",
+      tldr: "Identifies two types of self-consistency failure (hypothetical and compositional) in LLMs' multi-step reasoning.",
+      cluster: "reasoning", tags: ["reasoning", "self-consistency", "evaluation"],
+      methods: false, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "extrapolative-gen", title: "Extrapolative Controlled Sequence Generation via Iterative Refinement",
+      authors: "Vishakh Padmakumar*, Richard Yuanzhe Pang, He He, Ankur P. Parikh",
+      venue: "ICML", year: 2023, link: "https://arxiv.org/abs/2303.04562",
+      tldr: "Iteratively refines sequences to extrapolate past the best scores seen anywhere in training.",
+      cluster: "novelty", tags: ["controlled-generation", "extrapolation", "iterative-refinement", "novelty"],
+      methods: true, evalData: false, mlConf: true, representative: true
+    },
+    {
+      id: "reward-gaming", title: "Reward Gaming in Conditional Text Generation",
+      authors: "Richard Yuanzhe Pang, Vishakh Padmakumar, Thibault Sellam, Ankur P Parikh, He He",
+      venue: "ACL", year: 2023, link: "https://arxiv.org/abs/2211.08714",
+      tldr: "Identifies concrete ways reward models get 'gamed' during conditional text generation training.",
+      cluster: "reasoning", tags: ["reward-modeling", "generation", "reinforcement-learning", "analysis"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "dialogue-context", title: "Investigating The Representation Of Open Domain Dialogue Context For Transformer Models",
+      authors: "Vishakh Padmakumar, Behnam Hedayatnia, Di Jin, Patrick Lange, Seokhwan Kim, Nanyun Peng, Yang Liu, Dilek Hakkani-Tür",
+      venue: "SIGDIAL", year: 2023, link: "https://aclanthology.org/2023.sigdial-1.50/",
+      tldr: "Compares ways of encoding long dialogue context and how each affects transformer response quality.",
+      cluster: "reasoning", tags: ["dialogue", "transformers", "representation", "retrieval"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "debate-supervise", title: "Debate Helps Supervise Unreliable Experts",
+      authors: "Julian Michael, Salsabila Mahdi, David Rein, Jackson Petty, Julien Dirani, Vishakh Padmakumar, Samuel R. Bowman",
+      venue: "Preprint", year: 2023, link: "https://arxiv.org/abs/2311.08702",
+      tldr: "Shows debate between two unreliable AI experts helps a non-expert judge identify truthful answers more reliably than single-expert consultancy.",
+      cluster: "reasoning", tags: ["debate", "scalable-oversight", "evaluation"],
+      methods: false, evalData: true, mlConf: false, representative: false
+    },
+    {
+      id: "poem-instruction", title: "Help me write a Poem - Instruction Tuning as a Vehicle for Collaborative Poetry Writing",
+      authors: "Tuhin Chakrabarty*, Vishakh Padmakumar*, He He",
+      venue: "EMNLP", year: 2022, link: "https://arxiv.org/abs/2210.13669",
+      tldr: "Uses instruction tuning to build a collaborative poetry assistant that responds to open-ended requests.",
+      cluster: "cocreativity", tags: ["creativity", "instruction-tuning", "human-ai-collaboration", "user-study"],
+      methods: true, evalData: true, mlConf: true, representative: true
+    },
+    {
+      id: "caption-rewriting", title: "Machine-in-the-Loop Rewriting for Creative Image Captioning",
+      authors: "Vishakh Padmakumar, He He",
+      venue: "NAACL", year: 2022, link: "https://arxiv.org/abs/2111.04193",
+      tldr: "Puts humans in the loop rewriting machine-drafted captions to make them more vivid and creative.",
+      cluster: "cocreativity", tags: ["creativity", "human-ai-collaboration", "multimodal", "feedback-tuning", "user-study"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "task-transferability", title: "Exploring the Role of Task Transferability in Large-Scale Multi-Task Learning",
+      authors: "Vishakh Padmakumar, Leonard Lausen, Miguel Ballesteros, Sheng Zha, He He, George Karypis",
+      venue: "NAACL", year: 2022, link: "https://arxiv.org/abs/2204.11117",
+      tldr: "Studies which combinations of tasks actually transfer well in large-scale multi-task training.",
+      cluster: "reasoning", tags: ["transfer-learning"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "quality", title: "QuALITY: Question Answering with Long Input Texts, Yes!",
+      authors: "Richard Yuanzhe Pang, Alicia Parrish, Nitish Joshi, Nikita Nangia, Jason Phang, Angelica Chen, Vishakh Padmakumar, Johnny Ma, Jana Thompson, He He, Sam Bowman",
+      venue: "NAACL", year: 2022, link: "https://arxiv.org/abs/2112.08608",
+      tldr: "A long-document QA benchmark designed to require genuine reading, not shortcut retrieval.",
+      cluster: "tools", tags: ["dataset", "question-answering", "long-context", "benchmark"],
+      methods: false, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "two-turn-debate", title: "Two-Turn Debate Doesn't Help Humans Answer Hard Reading Comprehension Questions",
+      authors: "Alicia Parrish, Harsh Trivedi, Nikita Nangia, Vishakh Padmakumar, Jason Phang, Amanpreet Singh Saimbhi, Samuel R. Bowman",
+      venue: "Preprint", year: 2022, link: "https://arxiv.org/abs/2210.10860",
+      tldr: "Finds a second round of debate arguments doesn't actually help humans answer hard reading-comprehension questions more accurately.",
+      cluster: "reasoning", tags: ["debate", "question-answering", "user-study", "evaluation"],
+      methods: false, evalData: true, mlConf: false, representative: false
+    },
+    {
+      id: "bbq", title: "BBQ: A Hand-Built Bias Benchmark for Question Answering",
+      authors: "Alicia Parrish, Angelica Chen, Nikita Nangia, Vishakh Padmakumar, Jason Phang, Jana Thompson, Phu Mon Htut, Samuel R. Bowman",
+      venue: "ACL Findings", year: 2022, link: "https://arxiv.org/abs/2110.08193",
+      tldr: "A hand-built benchmark exposing social bias in QA models' predictions under ambiguous context.",
+      cluster: "tools", tags: ["fairness", "bias", "dataset", "benchmark", "question-answering"],
+      methods: false, evalData: true, mlConf: true, representative: false
+    },
+    {
+      id: "extract-select-rewrite", title: "Extract, Select and Rewrite: A Modular Sentence Summarization Method",
+      authors: "Shuo Guan, Vishakh Padmakumar",
+      venue: "New Frontiers in Summarization Workshop", year: 2023, link: "https://aclanthology.org/2023.newsum-1.4/",
+      tldr: "A three-stage modular summarization method (extract, select, rewrite) that's more faithful than end-to-end models.",
+      cluster: "reasoning", tags: ["summarization", "text-generation"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "unsup-summarization", title: "Unsupervised Extractive Summarization with Mutual Information",
+      authors: "Vishakh Padmakumar, He He",
+      venue: "EACL", year: 2021, link: "https://arxiv.org/abs/2102.06272",
+      tldr: "Selects summary sentences unsupervised, by maximizing mutual information with the source document.",
+      cluster: "reasoning", tags: ["summarization", "unsupervised", "information-theory", "retrieval"],
+      methods: true, evalData: false, mlConf: true, representative: false
+    },
+    {
+      id: "political-text", title: "A comparison of methods in political science text classification: Transfer learning language models for politics",
+      authors: "Zhanna Terechshenko, Fridolin Linder, Vishakh Padmakumar, Michael Liu, Jonathan Nagler, Josh Tucker, Richard Bonneau",
+      venue: "SSRN", year: 2020, link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3724644",
+      tldr: "Benchmarks transfer-learning language models against classical methods for political text classification.",
+      cluster: "early", tags: ["text-classification", "transfer-learning", "computational-social-science"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "disinformation", title: "Multi-Modal Content Similarities in Online Disinformation Campaigns",
+      authors: "Cody Buntain, Vishakh Padmakumar, Richard Bonneau, Jonathan Nagler, Josh Tucker",
+      venue: "ACM Collective Intelligence", year: 2020, link: "http://brandlane.dk/ci/2020/wa_files/68%20artificial%20dissimilarity.%20multi-modal%20content%20similarities%20in%20online%20campaigns.pdf",
+      tldr: "Traces how disinformation campaigns reuse and remix content across text and images.",
+      cluster: "early", tags: ["disinformation", "multimodal", "social-media", "computational-social-science"],
+      methods: false, evalData: false, mlConf: false, representative: false
+    },
+    {
+      id: "image-retrieval", title: "A Robust Approach to Open Vocabulary Image Retrieval with Deep Convolutional Neural Networks and Transfer Learning",
+      authors: "Vishakh Padmakumar, Rishab Ranga, Srivalya Elluru, Sowmya Kamath S.",
+      venue: "IEEE PNC", year: 2018, link: "https://ieeexplore.ieee.org/document/8579473",
+      tldr: "Undergrad thesis work: retrieves images for open-vocabulary queries using transfer-learned CNNs.",
+      cluster: "early", tags: ["computer-vision", "image-retrieval", "retrieval", "transfer-learning"],
+      methods: true, evalData: false, mlConf: false, representative: false
+    }
+  ];
+
+  var FILTERS = [
+    { id: "all",            label: "All papers" },
+    { id: "representative", label: "Representative picks" },
+    { id: "methods",        label: "Methods work" },
+    { id: "evalData",       label: "Evaluation & Datasets" },
+    { id: "mlConf",         label: "ML & NLP Conference Papers" },
+    { id: "connections",    label: "Explore connections", divider: true }
+  ];
+
+  // Hand-written notes for specific connections (keyed by "idA|idB", ids
+  // sorted alphabetically — see edgeKey()). Where a note exists it replaces
+  // the auto "Connected by: <shared tags>" tooltip text with this sentence
+  // instead. Pairs are reviewed one-by-one; most edges won't have a note yet.
+  var EDGE_NOTES = {
+    "llms-as-oracles|offloading-score":
+      "Offloading Score quantifies reliance on an AI tool in human-AI coding workflows, which are goal-oriented and objective, while LLMs as Oracles looks at reliance in more subjective settings through a more qualitative lens.",
+    "caption-rewriting|creativity-support":
+      "Machine-in-the-Loop Rewriting is a creative-writing user study with non-experts, while Creativity Support studies experts. While non-experts find LLM assistance helpful, experts are often frustrated by it.",
+    "creativity-support|poem-instruction":
+      "Help Me Write a Poem designs a training scheme suited to help writers in that particular domain, while Creativity Support documents issues in writing support for experts.",
+    "caption-rewriting|poem-instruction":
+      "Help Me Write a Poem directly follows from Machine-in-the-Loop Rewriting, proposing a way to train a model specifically suited for collaborative writing.",
+    "bbq|quality":
+      "QuALITY and BBQ are both datasets that test specific failure modes in language models through question answering. QuALITY tests long-document comprehension, while BBQ tests social bias in model outputs.",
+    "offloading-score|overreliance-position":
+      "The position paper motivates and provides evidence for the importance of the over-reliance problem, while Offloading Score offers an initial way to address it.",
+    "eval-diversity-quality|router-diversity":
+      "Sampling outputs from many different models, as done in the routing paper, is a way to mitigate the diversity issue that the evaluation paper brings out, even if it's a weak solution right now.",
+    "posttrain-diverse-writing|router-diversity":
+      "The post-training paper is a single-model solution to increase the diversity of outputs when sampling from one model, while the routing paper aims to select from a library of models to ensure diverse generations.",
+    "eval-diversity-quality|novelty":
+      "Novelty is defined as original and high-quality content, which is closely related to the pareto frontier of quality and diversity. If you generate more diverse outputs, the likelihood is that one or more will also be novel.",
+    "novelty|writing-diversity":
+      "Diversity and novelty are both core issues in language model generation. In general, if a model produces more diverse outputs, you'd expect one or more of them to also be novel.",
+    "literarytaste|whose-boat":
+      "LiteraryTaste is a dataset for understanding how users want writing personalized to their taste. While Whose Boat Does It Float? shows that a model can be trained to produce more personalized outputs with detailed user personas (like LiteraryTaste).",
+    "content-selection|posttrain-diverse-writing":
+      "The post-training paper presents a method to improve output diversity when sampling from a single language model, while the content-selection paper presents a principled, tool-based approach using DPPs to yield diverse and personalized generations.",
+    "content-selection|unsup-summarization":
+      "Both papers address content selection while maximizing relevance and diversity of content, but use different techniques. The summarization paper calculates mutual information from the language model distribution to select content units, while Principled Content Selection uses statistical tools, namely DPPs.",
+    "eval-diversity-quality|posttrain-diverse-writing":
+      "The post-training paper presents a method to improve output diversity when sampling from a language model, offering a solution to the problem identified by the evaluation paper.",
+    "ood-deductive|struggle-search":
+      "Transformers Struggle to Learn to Search presents a mechanistic analysis of the reasoning problem raised by the deductive-reasoning paper.",
+    "debate-supervise|two-turn-debate":
+      "The two-turn debate paper shows that, over a short horizon, two turns of debate from language models don't help (non-expert) humans answer MCQ questions better. However, in the follow-up, Debate Helps Supervise Unreliable Experts, shows that high-quality expert debate does provide some scalable oversight.",
+    "self-consistency-failures|struggle-search":
+      "Understanding different mechanisms behind reasoning behavior of LLMs.",
+    "beyond-binary|reward-gaming":
+      "Finding the right reward is challenging. In Beyond the Binary, we design a reward for pluralistic alignment, and in Reward Gaming we show that a spurious correlation significantly impacts model generations.",
+    "dialogue-context|unsup-summarization":
+      "Content selection using tailored objectives improves LLM generations in dialogue and summarizations.",
+    "dialogue-context|image-retrieval":
+      "The Open Vocabulary Image Retrieval project was my undergrad thesis and first ever research experience/publication. The connection is weak at best, where retrieval improves the generation quality, but I have a soft spot for this paper and didn't want it left out :)",
+    "political-text|task-transferability":
+      "Fundamentally, both of these show that, when done correctly, transfer learning works, and I think that's just a very fundamental lesson in machine learning.",
+    "extract-select-rewrite|unsup-summarization":
+      "Selecting the right content for summaries is a challenging problem. Both these works present a method for it that is either modular (Extract, Select, Rewrite) or objective-based (Unsupervised Summarization).",
+    "image-retrieval|unsup-summarization":
+      "These two projects don't have much of a meaningful connection, but this was my undergrad thesis (first publication ever) and my MS thesis (first *CL publication) work, so I always see them as connected.",
+    "disinformation|political-text":
+      "LLMs as tools for targeted computational social science tasks."
+  };
+
+  // Edges to exclude even though the papers share a tag (reviewed and judged
+  // not a real connection). Keyed the same way as EDGE_NOTES.
+  var EDGE_DROPS = {
+    "offloading-score|writing-diversity": true,
+    "llms-as-oracles|overreliance-position": true,
+    "llms-as-oracles|writing-diversity": true,
+    "creativity-support|offloading-score": true,
+    "content-selection|router-diversity": true,
+    "novelty|posttrain-diverse-writing": true,
+    "beyond-binary|literarytaste": true,
+    "content-selection|eval-diversity-quality": true,
+    "creativity-support|writing-diversity": true,
+    "llms-as-oracles|swe-chat": true,
+    "overreliance-position|swe-chat": true,
+    "overreliance-position|poem-instruction": true,
+    "overreliance-position|sparkme": true,
+    "literarytaste|swe-chat": true,
+    "ood-deductive|swe-chat": true,
+    "novelty|router-diversity": true,
+    "schema-litreview|sparkme": true,
+    "literarytaste|ood-deductive": true,
+    "beyond-binary|whose-boat": true,
+    "dialogue-context|struggle-search": true,
+    "debate-supervise|self-consistency-failures": true,
+    "self-consistency-failures|two-turn-debate": true,
+    "poem-instruction|two-turn-debate": true,
+    "caption-rewriting|two-turn-debate": true,
+    "caption-rewriting|disinformation": true,
+    "image-retrieval|task-transferability": true,
+    "image-retrieval|political-text": true
+  };
+
+  function edgeKey(idA, idB) {
+    return idA < idB ? idA + "|" + idB : idB + "|" + idA;
+  }
+
+  /* ============================ END DATA ============================= */
+
+  var clusterById = {};
+  CLUSTERS.forEach(function (c) { clusterById[c.id] = c; });
+
+  // Cluster anchors sit in two rows: the first half of LEGEND_ORDER along
+  // the top of the diagram, the second half along the bottom.
+  var W = 1100, H = 620, CX = 550, ROW_Y_TOP = 150, ROW_Y_BOTTOM = 490, ROW_SPAN = 620;
+  function layoutClusterRow(ids, y) {
+    var n = ids.length;
+    ids.forEach(function (id, i) {
+      var c = clusterById[id];
+      if (!c) return;
+      var t = n === 1 ? 0.5 : i / (n - 1);
+      c.ax = CX - ROW_SPAN / 2 + t * ROW_SPAN;
+      c.ay = y;
+    });
+  }
+  layoutClusterRow(LEGEND_ORDER.slice(0, 4), ROW_Y_TOP);
+  layoutClusterRow(LEGEND_ORDER.slice(4), ROW_Y_BOTTOM);
+
+  var nodes = PAPERS.map(function (p) {
+    var c = clusterById[p.cluster] || CLUSTERS[0];
+    return Object.assign({}, p, {
+      r: 5.5,
+      color: c.color,
+      x: c.ax + (Math.random() - 0.5) * 50,
+      y: c.ay + (Math.random() - 0.5) * 50,
+      driftAx: 3 + Math.random() * 4,
+      driftAy: 3 + Math.random() * 4,
+      driftWx: 0.00025 + Math.random() * 0.0003,
+      driftWy: 0.00025 + Math.random() * 0.0003,
+      driftPx: Math.random() * Math.PI * 2,
+      driftPy: Math.random() * Math.PI * 2
+    });
+  });
+  var nodeById = {};
+  nodes.forEach(function (n) { nodeById[n.id] = n; });
+
+  /* ---- build edges from shared tags, capped per node ---- */
+  function buildEdges(list, maxPerNode) {
+    var candidates = [];
+    for (var i = 0; i < list.length; i++) {
+      for (var j = i + 1; j < list.length; j++) {
+        var a = list[i], b = list[j];
+        if (EDGE_DROPS[edgeKey(a.id, b.id)]) continue;
+        var shared = a.tags.filter(function (t) { return b.tags.indexOf(t) !== -1; });
+        if (shared.length > 0) {
+          candidates.push({ source: a.id, target: b.id, weight: shared.length, sharedTags: shared });
+        }
+      }
+    }
+    candidates.sort(function (x, y) { return y.weight - x.weight; });
+    var degree = {};
+    var accepted = [];
+    candidates.forEach(function (e) {
+      var ds = degree[e.source] || 0, dt = degree[e.target] || 0;
+      if (ds < maxPerNode && dt < maxPerNode) {
+        accepted.push(e);
+        degree[e.source] = ds + 1;
+        degree[e.target] = dt + 1;
+      }
+    });
+    return accepted;
+  }
+  var edges = buildEdges(nodes, 4);
+  function prettyTag(t) { return t.replace(/-/g, " "); }
+
+  var neighborMap = {};
+  nodes.forEach(function (n) { neighborMap[n.id] = new Set(); });
+  edges.forEach(function (e) {
+    neighborMap[e.source].add(e.target);
+    neighborMap[e.target].add(e.source);
+  });
+
+  // d3.forceLink resolves edge.source/edge.target from id strings into the
+  // actual node objects the first time the force initializes. These helpers
+  // work either before or after that resolution happens.
+  function edgeSourceId(e) { return typeof e.source === "object" ? e.source.id : e.source; }
+  function edgeTargetId(e) { return typeof e.target === "object" ? e.target.id : e.target; }
+
+  /* ============================ RENDER ============================== */
+
+  var svg = d3.select("#rc-svg");
+  var edgeLayer = d3.select("#rc-edges");
+  var nodeLayer = d3.select("#rc-nodes");
+
+  var edgeGroups = edgeLayer.selectAll("g.rc-edge-group")
+    .data(edges)
+    .enter()
+    .append("g")
+    .attr("class", "rc-edge-group");
+
+  edgeGroups.append("line").attr("class", "rc-edge");
+  var edgeHitSel = edgeGroups.append("line").attr("class", "rc-edge-hit");
+  var edgeSel = edgeGroups.select(".rc-edge");
+
+  var nodeGroups = nodeLayer.selectAll("g.rc-node-group")
+    .data(nodes, function (d) { return d.id; })
+    .enter()
+    .append("g")
+    .attr("class", "rc-node-group rc-twinkle")
+    .style("color", function (d) { return d.color; })
+    .style("animation-delay", function () { return (Math.random() * 4).toFixed(2) + "s"; })
+    .style("animation-duration", function () { return (3.5 + Math.random() * 3).toFixed(2) + "s"; });
+
+  nodeGroups.append("circle")
+    .attr("class", "rc-node-halo")
+    .attr("r", function (d) { return d.r * 2.4; });
+
+  nodeGroups.append("circle")
+    .attr("class", "rc-node-core")
+    .attr("r", function (d) { return d.r; })
+    .attr("fill", function (d) { return d.color; });
+
+  var tooltip = d3.select("#rc-tooltip");
+  var nodeTooltipContent = document.getElementById("rc-tt-node-content");
+  var edgeTooltipContent = document.getElementById("rc-tt-edge-content");
+
+  nodeGroups
+    .on("pointerenter", function (event, d) { onNodeHover(d); positionTooltip(event); })
+    .on("pointermove", function (event) { positionTooltip(event); })
+    .on("pointerleave", function () { onHoverEnd(); })
+    .on("click", function (event, d) { window.open(d.link, "_blank", "noopener"); });
+
+  edgeHitSel
+    .on("pointerenter", function (event, d) { onEdgeHover(d); positionTooltip(event); })
+    .on("pointermove", function (event) { positionTooltip(event); })
+    .on("pointerleave", function () { onHoverEnd(); });
+
+  var rcRoot = document.getElementById("rc-root");
+  var LAYOUT_STORAGE_KEY = "rc-constellation-layout-v1";
+
+  function loadSavedLayout() {
+    try {
+      return JSON.parse(window.localStorage.getItem(LAYOUT_STORAGE_KEY) || "{}");
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function positionTooltip(event) {
+    var pad = 16;
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var x = event.clientX + pad, y = event.clientY + pad;
+    if (x + 290 > vw) x = event.clientX - 290 - pad;
+    if (y + 160 > vh) y = event.clientY - 160 - pad;
+    tooltip.style("left", x + "px").style("top", y + "px");
+  }
+
+  // ---- hover state: exactly one of hoveredNodeId / hoveredEdgeIds is set at a time ----
+  var hoveredNodeId = null;
+  var hoveredEdgeIds = null; // [sourceId, targetId] when hovering a connecting line
+
+  // Display the venue and its year in every view, including connection tooltips.
+  function paperMeta(p) {
+    return [p.venue, p.year].filter(Boolean).join(" · ");
+  }
+
+  function onNodeHover(d) {
+    hoveredNodeId = d.id;
+    hoveredEdgeIds = null;
+    nodeTooltipContent.style.display = "block";
+    edgeTooltipContent.style.display = "none";
+    var cl = clusterById[d.cluster];
+    tooltip.select("#rc-tt-cluster").text(cl ? cl.label : "").style("color", cl ? cl.color : "#fff");
+    tooltip.select("#rc-tt-title").text(d.title);
+    tooltip.select("#rc-tt-tldr").text(d.tldr);
+    tooltip.select("#rc-tt-meta").text(paperMeta(d));
+    tooltip.classed("show", true);
+    updateVisualState();
+  }
+
+  function onEdgeHover(e) {
+    var sId = edgeSourceId(e), tId = edgeTargetId(e);
+    var a = nodeById[sId], b = nodeById[tId];
+    hoveredEdgeIds = [sId, tId];
+    hoveredNodeId = null;
+    nodeTooltipContent.style.display = "none";
+    edgeTooltipContent.style.display = "block";
+    var note = EDGE_NOTES[edgeKey(sId, tId)];
+    tooltip.select("#rc-tt-edge-themes").text(note || ("Connected by: " + e.sharedTags.map(prettyTag).join(", ")));
+    tooltip.select("#rc-tt-edge-a")
+      .attr("href", a.link)
+      .html(a.title + "<small>" + paperMeta(a) + "</small>");
+    tooltip.select("#rc-tt-edge-b")
+      .attr("href", b.link)
+      .html(b.title + "<small>" + paperMeta(b) + "</small>");
+    tooltip.classed("show", true);
+    updateVisualState();
+  }
+
+  function onHoverEnd() {
+    hoveredNodeId = null;
+    hoveredEdgeIds = null;
+    tooltip.classed("show", false);
+    updateVisualState();
+  }
+
+  /* ---- filter dropdown ---- */
+  var activeFilter = "all";
+  var activeCluster = null;
+  var filterBtn = document.getElementById("rc-filter-btn");
+  var filterLabel = document.getElementById("rc-filter-label");
+  var filterPanel = document.getElementById("rc-filter-panel");
+
+  function filterCount(fid) {
+    if (fid === "all") return nodes.length;
+    if (fid === "connections") return edges.length;
+    return nodes.filter(function (n) { return n[fid] === true; }).length;
+  }
+
+  FILTERS.forEach(function (f) {
+    var btn = document.createElement("button");
+    btn.className = "rc-filter-option" + (f.id === "all" ? " active" : "") + (f.divider ? " rc-filter-divider" : "");
+    btn.setAttribute("data-filter", f.id);
+    btn.innerHTML = '<span>' + f.label + '</span><span class="rc-count">' + filterCount(f.id) + '</span>';
+    btn.addEventListener("click", function () {
+      activeFilter = f.id;
+      filterLabel.textContent = f.label;
+      filterPanel.querySelectorAll(".rc-filter-option").forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      filterPanel.classList.remove("open");
+      filterBtn.setAttribute("aria-expanded", "false");
+      updateVisualState();
+    });
+    filterPanel.appendChild(btn);
+  });
+
+  filterBtn.addEventListener("click", function () {
+    var open = filterPanel.classList.toggle("open");
+    filterBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest("#rc-root .rc-filter")) {
+      filterPanel.classList.remove("open");
+      filterBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  function matchesFilter(n) {
+    if (activeFilter === "connections") return true;
+    return activeFilter === "all" || n[activeFilter] === true;
+  }
+
+  // Returns 'primary' | 'linked' | 'clustered' | null for a node given the
+  // current hover state, or undefined if no hover is active at all.
+  // 'linked' = connected via a shared-tag edge (only meaningful once edges
+  // are visible, in "Explore connections" mode). 'clustered' = same theme
+  // as the hovered paper (the default, lighter-touch hover cue).
+  function nodeEmphasis(d) {
+    if (hoveredNodeId) {
+      if (d.id === hoveredNodeId) return "primary";
+      if (activeFilter === "connections") {
+        return (neighborMap[hoveredNodeId] && neighborMap[hoveredNodeId].has(d.id)) ? "linked" : null;
+      }
+      var hn = nodeById[hoveredNodeId];
+      return (hn && d.cluster === hn.cluster) ? "clustered" : null;
+    }
+    if (hoveredEdgeIds) {
+      return hoveredEdgeIds.indexOf(d.id) !== -1 ? "primary" : null;
+    }
+    return undefined;
+  }
+
+  function updateVisualState() {
+    var exploring = activeFilter === "connections";
+    rcRoot.classList.toggle("rc-explore", exploring);
+    d3.selectAll("#rc-legend .rc-legend-item")
+      .attr("aria-pressed", function () {
+        return this.getAttribute("data-cluster") === activeCluster ? "true" : "false";
+      });
+
+    edgeGroups.style("opacity", function (e) {
+      return activeCluster && (nodeById[edgeSourceId(e)].cluster !== activeCluster ||
+        nodeById[edgeTargetId(e)].cluster !== activeCluster) ? 0.14 : 1;
+    });
+
+    nodeGroups.each(function (d) {
+      var g = d3.select(this);
+      var filterFactor = matchesFilter(d) && (!activeCluster || d.cluster === activeCluster) ? 1 : 0.14;
+      var emph = nodeEmphasis(d);
+      var hoverFactor = emph === undefined ? 1 : (emph === null ? 0.22 : (emph === "clustered" ? 0.65 : 1));
+      var emphasized = emph === "primary" || emph === "linked";
+      var finalOpacity = Math.max(filterFactor * hoverFactor, 0.08);
+      g.style("opacity", finalOpacity);
+
+      var baseR = (activeFilter === "representative" && d.representative) ? d.r * 1.55 : d.r;
+      var displayR = emphasized ? baseR * 1.4 : baseR;
+
+      g.select(".rc-node-core")
+        .attr("r", displayR)
+        .style("filter", emphasized ? "drop-shadow(0 0 6px " + d.color + ")" : "none");
+      g.select(".rc-node-halo")
+        .attr("r", displayR * (emphasized ? 2.2 : 2.4))
+        .style("opacity", emphasized ? 0.28 : 0.14);
+    });
+
+    edgeSel.each(function (e) {
+      var line = d3.select(this);
+      var sId = edgeSourceId(e), tId = edgeTargetId(e);
+      if (!exploring) {
+        line.style("stroke-opacity", 0);
+        return;
+      }
+      var base = 0.14;
+      if (hoveredNodeId) {
+        base = (sId === hoveredNodeId || tId === hoveredNodeId) ? 0.55 : 0.03;
+      } else if (hoveredEdgeIds) {
+        var isThisEdge = (sId === hoveredEdgeIds[0] && tId === hoveredEdgeIds[1]) ||
+                          (sId === hoveredEdgeIds[1] && tId === hoveredEdgeIds[0]);
+        base = isThisEdge ? 0.85 : 0.03;
+        line.style("stroke-width", isThisEdge ? "1.8px" : "1px");
+        line.style("stroke", isThisEdge ? "#5b667a" : "#a7afc2");
+      }
+      if (!hoveredEdgeIds) { line.style("stroke-width", "1px"); line.style("stroke", "#a7afc2"); }
+      line.style("stroke-opacity", base);
+    });
+  }
+
+  /* ============================ PHYSICS =============================== */
+
+  // If this is an exported static copy (EXPORTED_LAYOUT baked in) and/or a
+  // manual layout was saved earlier in this browser (localStorage, which
+  // takes priority per-paper), we skip animating the algorithmic settle and
+  // jump straight to those positions on the very first frame. (Otherwise
+  // the stars would fly into their algorithmic spots and THEN snap to the
+  // fixed layout once the simulation ended — a visible "shift".) Everyone
+  // else gets the live force-simulated layout, animating into place under
+  // the two-row cluster anchors above.
+  var savedLayoutOnLoad = Object.assign({}, EXPORTED_LAYOUT || {}, loadSavedLayout());
+  var hasSavedLayoutOnLoad = Object.keys(savedLayoutOnLoad).length > 0;
+
+  var sim = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody().strength(-75))
+    .force("collide", d3.forceCollide().radius(function (d) { return d.r + 7; }))
+    .force("link", d3.forceLink(edges).id(function (d) { return d.id; }).distance(58).strength(0.18))
+    .force("x", d3.forceX(function (d) { return clusterById[d.cluster].ax; }).strength(0.09))
+    .force("y", d3.forceY(function (d) { return clusterById[d.cluster].ay; }).strength(0.09));
+
+  function renderPositions() {
+    nodeGroups.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+    // by the time forces have initialized, d.source/d.target on each edge are
+    // already the resolved node objects (not id strings) — use them directly.
+    // Both the visible line and its wider invisible hover target share the
+    // same datum (the edge), so updating all <line> children at once keeps
+    // them in sync.
+    edgeGroups.selectAll("line")
+      .attr("x1", function (d) { return nodeById[edgeSourceId(d)].x; })
+      .attr("y1", function (d) { return nodeById[edgeSourceId(d)].y; })
+      .attr("x2", function (d) { return nodeById[edgeTargetId(d)].x; })
+      .attr("y2", function (d) { return nodeById[edgeTargetId(d)].y; });
+  }
+
+  function fitConstellation() {
+    var pad = 36; // Leaves breathing room around halos and the gentle drift.
+    var minX = d3.min(nodes, function (d) { return d.x0; }) - pad;
+    var maxX = d3.max(nodes, function (d) { return d.x0; }) + pad;
+    var minY = d3.min(nodes, function (d) { return d.y0; }) - pad;
+    var maxY = d3.max(nodes, function (d) { return d.y0; }) + pad;
+    svg.attr("viewBox", [minX, minY, maxX - minX, maxY - minY].join(" "));
+  }
+
+  if (hasSavedLayoutOnLoad) {
+    // Fast-forward the simulation silently (no rendered ticks, no "end"
+    // event) so we still know where the algorithmic layout would have
+    // settled — that's what "Reset layout" falls back to — then paint once,
+    // directly at the saved positions.
+    sim.stop();
+    for (var _i = 0; _i < 300; _i++) sim.tick();
+    nodes.forEach(function (d) {
+      d.origX0 = d.x;
+      d.origY0 = d.y;
+      var pos = savedLayoutOnLoad[d.id];
+      if (pos && typeof pos.x === "number" && isFinite(pos.x) && typeof pos.y === "number" && isFinite(pos.y)) {
+        d.x = pos.x;
+        d.y = pos.y;
+      }
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
+    fitConstellation();
+    renderPositions();
+    requestAnimationFrame(driftFrame);
+  } else {
+    sim.on("tick", renderPositions).on("end", startDrift);
+  }
+
+  function startDrift() {
+    nodes.forEach(function (d) {
+      d.x0 = d.x;
+      d.y0 = d.y;
+      // remembered so "Reset layout" can restore the automatic arrangement
+      // even after making a manual rearrangement
+      d.origX0 = d.x;
+      d.origY0 = d.y;
+    });
+    fitConstellation();
+    renderPositions();
+    requestAnimationFrame(driftFrame);
+  }
+
+  function driftFrame(t) {
+    nodes.forEach(function (d) {
+      if (d.dragging) return; // actively being dragged — dragged() sets position directly
+      d.x = d.x0 + d.driftAx * Math.sin(t * d.driftWx + d.driftPx);
+      d.y = d.y0 + d.driftAy * Math.sin(t * d.driftWy + d.driftPy);
+    });
+    renderPositions();
+    requestAnimationFrame(driftFrame);
+  }
+
+  /* ============================ LEGEND ================================ */
+
+  var legend = d3.select("#rc-legend");
+  LEGEND_ORDER.forEach(function (id) {
+    var c = clusterById[id];
+    if (!c) return;
+    var item = legend.append("button")
+      .attr("type", "button")
+      .attr("class", "rc-legend-item")
+      .attr("data-cluster", id)
+      .attr("aria-pressed", "false")
+      .style("color", c.color)
+      .on("click", function () {
+        activeCluster = activeCluster === id ? null : id;
+        onHoverEnd();
+      });
+    item.append("span").attr("class", "rc-legend-dot").style("background", c.color);
+    item.append("span").text(c.label).style("color", "var(--rc-muted)");
+  });
+
+  updateVisualState();
+})();
+</script></body></html>

@@ -5,9 +5,24 @@ title: Publications
 
 You can also browse my [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao) for a more up-to-date list of papers.
 
+**LLMs as Oracles: Reliance on LLMs for Subjective Personal Questions** <br/>
+Myra Cheng, Lujain Ibrahim, Grace Liu, Michelle S Lam, **Vishakh Padmakumar**, Nick Madibekov, Diyi Yang, Dan Jurafsky <br/>
+*Preprint* <br/>
+\[[paper](https://arxiv.org/abs/2609.14849)\]  <br/>
+
+**Offloading Score: Measuring AI Reliance Through Counterfactual Workflows** <br/>
+**Vishakh Padmakumar**, Lujain Ibrahim, Zora Zhiruo Wang, Jennifer Wang, Q Vera Liao, Diyi Yang <br/>
+*NeurIPS 2026 (Oral! One of 15 papers selected!)* <br/>
+\[[paper](https://arxiv.org/abs/2605.29392)\]  <br/>
+
+**SWE-chat: Coding agent interactions from real users in the wild** <br/>
+Joachim Baumann, **Vishakh Padmakumar**, Xiang Li, John Yang, Diyi Yang, Sanmi Koyejo <br/>
+*COLM 2026* <br/>
+\[[paper](https://arxiv.org/abs/2604.20779)\]  <br/>
+
 **No Single Best Model for Diversity: Learning a Router for Sample Diversity** <br/>
 Yuhan Liu, Fangyuan Xu, **Vishakh Padmakumar**, Daphne Ippolito, Eunsol Choi <br/>
-*Preprint* <br/>
+*COLM 2026* <br/>
 \[[paper](https://arxiv.org/abs/2604.02319)\]  <br/>
 
 **SparkMe: Adaptive Semi-Structured Interviewing for Qualitative Insight Discovery** <br/>

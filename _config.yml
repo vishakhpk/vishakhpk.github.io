@@ -20,6 +20,7 @@ navbar-links:
 #    - Learn markdown: "https://www.markdowntutorial.com/"
   Home: "https://vishakhpk.github.io"
   Publications: "publications"
+  Constellation: "research-constellation/"
   Talks: "talks"
   Blog: "https://paddyspen.wordpress.com//"
 
@@ -231,4 +232,3 @@ plugins:
 
 # Beautiful Jekyll / Dean Attali
 # 2fc73a3a967e97599c9763d05e564189
-

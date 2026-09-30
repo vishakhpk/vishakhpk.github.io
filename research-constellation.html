@@ -1,0 +1,30 @@
+---
+layout: page
+title: false
+share-title: "Research Constellation | Vishakh Padmakumar"
+description: "Explore Vishakh Padmakumar's research by theme and connections between papers."
+permalink: /research-constellation/
+full-width: true
+---
+
+<iframe
+  id="research-constellation-frame"
+  title="Interactive research constellation"
+  src="{{ '/research-constellation-static%20(1).html' | relative_url }}"
+  style="display: block; width: 100%; max-width: 1040px; height: 850px; margin: 1rem auto; border: 0;"
+></iframe>
+
+<script>
+  (function () {
+    var frame = document.getElementById('research-constellation-frame');
+    frame.addEventListener('load', function () {
+      var root = frame.contentDocument.getElementById('rc-root');
+      if (!root) return;
+      function resizeFrame() {
+        frame.style.height = Math.ceil(root.getBoundingClientRect().bottom + 16) + 'px';
+      }
+      resizeFrame();
+      new ResizeObserver(resizeFrame).observe(root);
+    });
+  })();
+</script>
