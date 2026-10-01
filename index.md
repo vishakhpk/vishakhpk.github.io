@@ -2,22 +2,28 @@
 layout: home
 title: Vishakh Padmakumar
 ---
-I'm a post-doctoral researcher at Stanford, working with [Diyi Yang](https://cs.stanford.edu/~diyiy/) at the [SALT](https://saltlab.stanford.edu/) Lab. I recently graduated with a PhD from the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I was advised by [Prof. He He](https://hhexiy.github.io/). 
+I'm a post-doctoral researcher at Stanford, working with [Diyi Yang](https://cs.stanford.edu/~diyiy/) at the [SALT](https://saltlab.stanford.edu/) Lab. 
 
 I'm interested in measuring and mitigating the societal impacts of AI. This involves designing metrics that quantify effects such as [homogenization](https://arxiv.org/abs/2309.05196) in LLM outputs and user [reliance](https://arxiv.org/abs/2605.29392) on coding agents, evaluating these with both [automatic evaluation](https://arxiv.org/abs/2504.09389) and [user studies](https://dl.acm.org/doi/abs/10.1145/3635636.3656201), and then proposing targeted [training](https://openreview.net/forum?id=1Pmuw08LoM) [methods](https://arxiv.org/abs/2303.04562) to mitigate these.
-I'm currently thinking about (1) how to mitigate user overreliance on AI, (2) how AI agents shape the future of work and education, (3) how to support co-creativity with foundation models, (4) how we can elicit more diverse and novel LLM outputs for applications like scientific discovery. 
 
-If my name is familiar but you can't place it, that might be from when I helped organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series for many years. I'm also currently co-organizing the SALT & Talk series at Stanford. Prior to this, I completed my MS in Computer Science at NYU's [Courant Institute of Mathematical Sciences](https://cims.nyu.edu/) during which I was a Graduate Research Associate at the [Center for Social Media and Politics](https://csmapnyu.org/) working on applying deep learning to computational social science tasks. I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
+I'm currently thinking about (1) how to mitigate user overreliance on AI, (2) how AI agents shape the future of work and education, (3) how to support co-creativity with foundation models, (4) how we can elicit more diverse and novel LLM outputs for applications like scientific discovery. Come talk to me about any of this for hot takes! 
 
-Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Also experimenting with a [fun visualization of my work]({{ '/research-constellation/' | relative_url }}) inspired by Phillipe's [research garden](https://tingofurro.github.io/) and Katarzyna's [research landscape](https://kasia-kobalczyk.com/). Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakkp@stanford.edu> or <vishakh@nyu.edu>. 
+Prior to Stanford, I did my PhD from the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I was advised by [Prof. He He](https://hhexiy.github.io/). During that time, I also helped organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series for many years. Prior to my PhD, I also did research at the [Center for Social Media and Politics](https://csmapnyu.org/) in NYU working on applying deep learning to computational social science tasks. I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
+
+Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). 
+
+Also experimenting with a [fun visualization of my work]({{ '/research-constellation/' | relative_url }}) inspired by Phillipe's [research garden](https://tingofurro.github.io/) and Katarzyna's [research landscape](https://kasia-kobalczyk.com/). 
+
+Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakkp@stanford.edu> or <vishakh@nyu.edu>. 
 
 
 ### Updates:
 
 <ul style="height: 300px; overflow: auto">
     <li><i>September 2026: </i> <a href="https://arxiv.org/abs/2605.29392">Offloading-Score</a> was accepted as an <i>Oral</i> at NeurIPS, one of 15 papers selected in the Evaluations track.<br />
+    <li><i>August 2026: </i> New <a href="https://www.alphaxiv.org/abs/2608.human-ai-collaboration-at-scalev1">pre-print</a> where we analyze "in-the-wild" web traffic from Claude in collaboration with the societal impacts team at Anthropic..<br />
     <li><i>July 2026: </i> Two papers at COLM on <a href="https://arxiv.org/abs/2604.02319">routing for sample diversity</a> and <a href="https://arxiv.org/abs/2604.20779">coding agent usage</a>. See you in SF (well this need not be just at COLM :))! <br />
-    <li><i> July 2026 </i>: Helping organize the [CIVIC-AI workshop](https://civic-ai-collaboration.github.io/) in Singapore. <br/>
+    <li><i> July 2026 </i>: Helping organize the <a href="https://civic-ai-collaboration.github.io/">CIVIC-AI workshop</a> in Singapore. <br/>
     <li><i>May 2026: </i> New <a href="https://arxiv.org/abs/2605.29392">paper</a>, Offloading-Score, where we present a new way to quantify reliance on AI in coding agent workflows. <br />
     <li><i>April 2026: </i> New <a href="https://www.swe-chat.com/">dataset</a>, SWE-Chat, and <a href="https://arxiv.org/abs/2604.20779">paper</a> to help us understand how real users work with coding agents. <br />
     <li><i>April 2026: </i> New <a href="https://arxiv.org/abs/2604.02319">pre-print</a> on routing across models to improve sample diversity in open-ended generation. <br />

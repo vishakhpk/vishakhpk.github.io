@@ -10,6 +10,11 @@ Myra Cheng, Lujain Ibrahim, Grace Liu, Michelle S Lam, **Vishakh Padmakumar**, N
 *Preprint* <br/>
 \[[paper](https://arxiv.org/abs/2609.14849)\]  <br/>
 
+**Human–AI Collaboration at Scale: Task Criticality, Agency, and Friction Across 250,000 Conversations** <br/>
+Yijia Shao, Dora Zhao, **Vishakh Padmakumar**, Jennifer Wang, Diyi Yang <br/>
+*Preprint, 2026* <br/>
+\[[paper](https://www.alphaxiv.org/abs/2608.human-ai-collaboration-at-scalev1)\]  <br/>
+
 **Offloading Score: Measuring AI Reliance Through Counterfactual Workflows** <br/>
 **Vishakh Padmakumar**, Lujain Ibrahim, Zora Zhiruo Wang, Jennifer Wang, Q Vera Liao, Diyi Yang <br/>
 *NeurIPS 2026 (Oral! One of 15 papers selected!)* <br/>

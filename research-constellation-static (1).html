@@ -262,6 +262,46 @@
     .rc-filter-panel { right: 0; left: auto; }
     .rc-filter-btn { font-size: 0.75rem; padding: 0.5rem; gap: 0.3rem; }
   }
+  /* Experimental cluster spaces: a quiet backdrop, with labels in open space. */
+  .rc-cluster-space {
+    stroke-width: 1;
+    stroke-linejoin: round;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .rc-cluster-label {
+    font-family: 'Lora', 'Times New Roman', serif;
+    text-anchor: middle;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .rc-cluster-label-title { font-size: 12px; font-weight: 700; }
+  .rc-cluster-label-description { font-size: 10.5px; fill: #66717b; }
+  @media (max-width: 560px) {
+    .rc-controls { flex-wrap: wrap; white-space: normal; text-align: center; }
+  }
+  .rc-paper-list {
+    margin: 0.75rem 0 0.25rem;
+    border-top: 1px solid var(--rc-border);
+    padding-top: 0.8rem;
+    font-family: 'Lora', 'Times New Roman', serif;
+  }
+  .rc-paper-list summary {
+    cursor: pointer;
+    font-size: 1.05rem;
+    font-weight: 700;
+    padding: 0.5rem 0;
+  }
+  .rc-paper-list summary:focus-visible {
+    outline: 2px solid var(--rc-link);
+    outline-offset: 4px;
+  }
+  .rc-paper-list ol { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+  .rc-paper-list li { padding: 0.8rem 0; border-top: 1px solid var(--rc-border); }
+  .rc-paper-list a { color: var(--rc-link); text-decoration: none; line-height: 1.5; }
+  .rc-paper-list a:hover { text-decoration: underline; }
+  .rc-paper-list-meta { margin-top: 0.3rem; color: var(--rc-muted); font-size: 0.85rem; }
+  .rc-paper-list-empty { color: var(--rc-muted); font-size: 0.9rem; }
 </style>
 </head>
 <body style="margin:0; background:transparent;">
@@ -283,10 +323,17 @@
 
   <div class="rc-stage">
     <svg class="rc-svg" id="rc-svg" viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid meet">
+      <g id="rc-cluster-spaces"></g>
+      <g id="rc-cluster-labels"></g>
       <g id="rc-edges"></g>
       <g id="rc-nodes"></g>
     </svg>
   </div>
+  <details class="rc-paper-list" id="rc-paper-list" hidden>
+    <summary id="rc-paper-list-summary"></summary>
+    <ol id="rc-paper-list-items"></ol>
+    <p class="rc-paper-list-empty" id="rc-paper-list-empty" hidden>No papers match this selection.</p>
+  </details>
 </div>
 
 <div class="rc-tooltip" id="rc-tooltip">
@@ -316,7 +363,7 @@
   // Replaced by "Export static copy" with the on-screen positions at export
   // time. Left null in the authored/live file — do not hand-edit this line,
   // it's a find-and-replace target (see EXPORT_PLACEHOLDER below).
-  var EXPORTED_LAYOUT = {"llms-as-oracles":{"x":527.15,"y":388.2},"offloading-score":{"x":536.54,"y":335.95},"overreliance-position":{"x":568.06,"y":378.93},"swe-chat":{"x":330.2,"y":444.41},"router-diversity":{"x":302.25,"y":128.82},"sparkme":{"x":429.88,"y":358.62},"novelty":{"x":507.9,"y":159.78},"literarytaste":{"x":243.96,"y":289.65},"schema-litreview":{"x":390.61,"y":379.42},"content-selection":{"x":382.83,"y":231.51},"whose-boat":{"x":433.02,"y":251.48},"eval-diversity-quality":{"x":385.8,"y":95.5},"posttrain-diverse-writing":{"x":260.94,"y":160.8},"struggle-search":{"x":788.91,"y":223.1},"beyond-binary":{"x":394.43,"y":282.48},"writing-diversity":{"x":337.51,"y":173.72},"creativity-support":{"x":217.39,"y":346.57},"ood-deductive":{"x":714.18,"y":192.2},"self-consistency-failures":{"x":740.55,"y":271.56},"extrapolative-gen":{"x":492.3,"y":107.48},"reward-gaming":{"x":703.27,"y":109.82},"dialogue-context":{"x":687.77,"y":259.58},"debate-supervise":{"x":671.78,"y":330.3},"poem-instruction":{"x":299.88,"y":344.35},"caption-rewriting":{"x":251.12,"y":398.25},"task-transferability":{"x":600.26,"y":130.77},"quality":{"x":374.04,"y":424.34},"two-turn-debate":{"x":718.22,"y":306.47},"bbq":{"x":430.05,"y":411.91},"extract-select-rewrite":{"x":654.54,"y":185.74},"unsup-summarization":{"x":600.03,"y":188.99},"political-text":{"x":480.82,"y":489.79},"disinformation":{"x":562.8,"y":490.58},"image-retrieval":{"x":726.42,"y":410.11}};
+  var EXPORTED_LAYOUT = {"llms-as-oracles":{"x":527.15,"y":388.2},"offloading-score":{"x":536.54,"y":335.95},"overreliance-position":{"x":568.06,"y":378.93},"swe-chat":{"x":330.2,"y":444.41},"router-diversity":{"x":302.25,"y":128.82},"sparkme":{"x":429.88,"y":358.62},"novelty":{"x":507.9,"y":159.78},"literarytaste":{"x":243.96,"y":289.65},"schema-litreview":{"x":390.61,"y":379.42},"content-selection":{"x":382.83,"y":231.51},"whose-boat":{"x":433.02,"y":251.48},"eval-diversity-quality":{"x":385.8,"y":95.5},"posttrain-diverse-writing":{"x":260.94,"y":160.8},"struggle-search":{"x":788.91,"y":223.1},"beyond-binary":{"x":394.43,"y":282.48},"writing-diversity":{"x":337.51,"y":173.72},"creativity-support":{"x":217.39,"y":346.57},"ood-deductive":{"x":714.18,"y":192.2},"self-consistency-failures":{"x":740.55,"y":271.56},"extrapolative-gen":{"x":492.3,"y":107.48},"reward-gaming":{"x":703.27,"y":109.82},"dialogue-context":{"x":687.77,"y":259.58},"debate-supervise":{"x":671.78,"y":330.3},"poem-instruction":{"x":299.88,"y":344.35},"caption-rewriting":{"x":251.12,"y":398.25},"task-transferability":{"x":600.26,"y":130.77},"quality":{"x":374.04,"y":424.34},"two-turn-debate":{"x":718.22,"y":306.47},"bbq":{"x":430.05,"y":411.91},"extract-select-rewrite":{"x":654.54,"y":185.74},"unsup-summarization":{"x":600.03,"y":188.99},"political-text":{"x":480.82,"y":489.79},"disinformation":{"x":562.8,"y":490.58},"image-retrieval":{"x":726.42,"y":410.11},"human-ai-collaboration-scale":{"x":575,"y":410}};
 
   var CLUSTERS = [
     { id: "diversity",      label: "Diversity",                     color: "#4A90C2" },
@@ -339,6 +386,14 @@
   ];
 
   var PAPERS = [
+    {
+      id: "human-ai-collaboration-scale", title: "Human–AI Collaboration at Scale: Task Criticality, Agency, and Friction Across 250,000 Conversations",
+      authors: "Yijia Shao, Dora Zhao, Vishakh Padmakumar, Jennifer Wang, Diyi Yang",
+      venue: "Preprint", year: 2026, link: "https://www.alphaxiv.org/abs/2608.human-ai-collaboration-at-scalev1",
+      tldr: "Analyzes nearly 250,000 real-world AI conversations to study task criticality, human agency, and how users navigate friction in collaboration.",
+      cluster: "overreliance", tags: ["human-ai-collaboration", "human-agency", "evaluation", "analysis"],
+      methods: false, evalData: true, mlConf: false, representative: false
+    },
     {
       id: "llms-as-oracles", title: "LLMs as Oracles: Reliance on LLMs for Subjective Personal Questions",
       authors: "Myra Cheng, Lujain Ibrahim, Grace Liu, Michelle S. Lam, Vishakh Padmakumar, Nick Madibekov, Diyi Yang, Dan Jurafsky",
@@ -615,7 +670,7 @@
 
   var FILTERS = [
     { id: "all",            label: "All papers" },
-    { id: "representative", label: "Representative picks" },
+    { id: "representative", label: "Representative work" },
     { id: "methods",        label: "Methods work" },
     { id: "evalData",       label: "Evaluation & Datasets" },
     { id: "mlConf",         label: "ML & NLP Conference Papers" },
@@ -914,6 +969,7 @@
 
   /* ---- filter dropdown ---- */
   var activeFilter = "all";
+  var hasFilterSelection = false;
   var activeCluster = null;
   var filterBtn = document.getElementById("rc-filter-btn");
   var filterLabel = document.getElementById("rc-filter-label");
@@ -932,6 +988,8 @@
     btn.innerHTML = '<span>' + f.label + '</span><span class="rc-count">' + filterCount(f.id) + '</span>';
     btn.addEventListener("click", function () {
       activeFilter = f.id;
+      hasFilterSelection = true;
+      paperListKey = null;
       filterLabel.textContent = f.label;
       filterPanel.querySelectorAll(".rc-filter-option").forEach(function (b) { b.classList.remove("active"); });
       btn.classList.add("active");
@@ -978,7 +1036,53 @@
     return undefined;
   }
 
+  var paperListKey = null;
+
+  function updatePaperList() {
+    // Hover updates must not rebuild the list or reopen a collapsed section.
+    var key = (activeCluster || "") + ":" + activeFilter;
+    if (key === paperListKey) return;
+    paperListKey = key;
+    var panel = document.getElementById("rc-paper-list");
+    panel.hidden = !activeCluster && !hasFilterSelection;
+    if (panel.hidden) return;
+    var papers = PAPERS.filter(function (p) {
+      return (!activeCluster || p.cluster === activeCluster) && matchesFilter(p);
+    }).sort(function (a, b) {
+      return (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title);
+    });
+    var filterName = FILTERS.find(function (f) { return f.id === activeFilter; }).label;
+    var listTitle = activeCluster ? clusterById[activeCluster].label : filterName;
+    if (activeCluster && activeFilter !== "all") listTitle += " · " + filterName;
+    document.getElementById("rc-paper-list-summary").textContent =
+      listTitle + " — " + papers.length +
+      (papers.length === 1 ? " paper" : " papers");
+    var list = document.getElementById("rc-paper-list-items");
+    list.replaceChildren();
+    papers.forEach(function (p) {
+      var item = document.createElement("li");
+      var link = document.createElement("a");
+      link.href = p.link;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = p.title;
+      item.appendChild(link);
+      var meta = document.createElement("div");
+      meta.className = "rc-paper-list-meta";
+      meta.textContent = [p.year, p.venue].filter(Boolean).join(" · ");
+      item.appendChild(meta);
+      list.appendChild(item);
+    });
+    document.getElementById("rc-paper-list-empty").hidden = papers.length !== 0;
+    panel.open = true;
+  }
+
   function updateVisualState() {
+    updatePaperList();
+    d3.selectAll(".rc-cluster-space, .rc-cluster-label")
+      .style("opacity", function (c) {
+        return activeCluster && c.id !== activeCluster ? 0.2 : 1;
+      });
     var exploring = activeFilter === "connections";
     rcRoot.classList.toggle("rc-explore", exploring);
     d3.selectAll("#rc-legend .rc-legend-item")
@@ -1043,7 +1147,7 @@
   // fixed layout once the simulation ended — a visible "shift".) Everyone
   // else gets the live force-simulated layout, animating into place under
   // the two-row cluster anchors above.
-  var savedLayoutOnLoad = Object.assign({}, EXPORTED_LAYOUT || {}, loadSavedLayout());
+  var savedLayoutOnLoad = EXPORTED_LAYOUT; // Preview annotations use these fixed positions.
   var hasSavedLayoutOnLoad = Object.keys(savedLayoutOnLoad).length > 0;
 
   var sim = d3.forceSimulation(nodes)
@@ -1067,13 +1171,52 @@
       .attr("y2", function (d) { return nodeById[edgeTargetId(d)].y; });
   }
 
+  // Headings sit just outside their tinted cluster boundaries.
+  var CLUSTER_CAPTIONS = {
+    diversity: { x: 326, y: 65 },
+    novelty: { x: 500, y: 77 },
+    reasoning: { x: 710, y: 79 },
+    cocreativity: { x: 249, y: 259 },
+    personalization: { x: 407, y: 315 },
+    overreliance: { x: 557, y: 306 },
+    tools: { x: 376, y: 477 },
+    early: { x: 669, y: 474 }
+  };
+
+  function drawClusterSpaces() {
+    var spaceLayer = d3.select("#rc-cluster-spaces");
+    var labelLayer = d3.select("#rc-cluster-labels");
+    var outline = d3.line().curve(d3.curveCatmullRomClosed.alpha(0.5));
+    CLUSTERS.forEach(function (c) {
+      var members = nodes.filter(function (n) { return n.cluster === c.id; });
+      var points = [];
+      members.forEach(function (n) {
+        // A padded hull accommodates halos and motion, including two-paper clusters.
+        for (var i = 0; i < 16; i++) {
+          var angle = i * Math.PI / 8;
+          points.push([n.x0 + 23 * Math.cos(angle), n.y0 + 23 * Math.sin(angle)]);
+        }
+      });
+      var hull = d3.polygonHull(points);
+      if (!hull) return;
+      spaceLayer.append("path").datum(c)
+        .attr("class", "rc-cluster-space")
+        .attr("d", outline(hull))
+        .attr("fill", c.color).attr("fill-opacity", 0.085)
+        .attr("stroke", c.color).attr("stroke-opacity", 0.19);
+      var caption = CLUSTER_CAPTIONS[c.id];
+      var label = labelLayer.append("g").datum(c)
+        .attr("class", "rc-cluster-label")
+        .attr("transform", "translate(" + caption.x + "," + caption.y + ")");
+      label.append("text").attr("class", "rc-cluster-label-title")
+        .attr("fill", d3.color(c.color).darker(0.7)).text(c.label);
+    });
+  }
+
   function fitConstellation() {
-    var pad = 36; // Leaves breathing room around halos and the gentle drift.
-    var minX = d3.min(nodes, function (d) { return d.x0; }) - pad;
-    var maxX = d3.max(nodes, function (d) { return d.x0; }) + pad;
-    var minY = d3.min(nodes, function (d) { return d.y0; }) - pad;
-    var maxY = d3.max(nodes, function (d) { return d.y0; }) + pad;
-    svg.attr("viewBox", [minX, minY, maxX - minX, maxY - minY].join(" "));
+    // Fit the compact headings and cluster regions without moving any papers.
+    svg.attr("viewBox", "145 48 685 483");
+    drawClusterSpaces();
   }
 
   if (hasSavedLayoutOnLoad) {
