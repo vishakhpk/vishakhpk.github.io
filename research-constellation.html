@@ -7,14 +7,34 @@ permalink: /research-constellation/
 full-width: true
 ---
 
+<style>
+  .constellation-content {
+    width: 100%;
+    max-width: 1000px;
+    min-width: 0;
+    margin: 0 auto;
+  }
+  .constellation-content > p {
+    overflow-wrap: anywhere;
+  }
+  #research-constellation-frame {
+    display: block;
+    width: 100%;
+    height: 850px;
+    margin: 1rem 0;
+    border: 0;
+  }
+</style>
+
+<div class="constellation-content">
 <p>I like thinking about interesting ways to visualize my work together and this is my latest attempt. You can click and view papers on different topics, or by some other dimensions people ask about like methods vs evaluation etc. The clusters here are related work, and the positioning/distance from the papers roughly represents how closely I "see" them together. This was heavily inspired by others who also have very cool Phillipe's <a href="https://tingofurro.github.io/">research garden</a> and Katarzyna's <a href="https://kasia-kobalczyk.com/">research landscape</a>.</p>
 
 <iframe
   id="research-constellation-frame"
   title="Interactive research constellation"
   src="{{ '/research-constellation-static%20(1).html' | relative_url }}"
-  style="display: block; width: 100%; max-width: 1040px; height: 850px; margin: 1rem auto; border: 0;"
 ></iframe>
+</div>
 
 <script>
   (function () {
