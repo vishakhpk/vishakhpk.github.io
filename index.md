@@ -2,17 +2,17 @@
 layout: home
 title: Vishakh Padmakumar
 ---
+<img src="{{ '/assets/img/job-market-banner.png' | relative_url }}" alt="Vishakh is on the faculty job market in 2026!" width="2172" height="724" style="display: block; width: 75%; height: auto; margin: 0 auto 1.5rem;">
+
 I'm a post-doctoral researcher at Stanford, working with [Diyi Yang](https://cs.stanford.edu/~diyiy/) at the [SALT](https://saltlab.stanford.edu/) Lab. 
 
-I'm interested in measuring and mitigating the societal impacts of AI. This involves designing metrics that quantify effects such as [homogenization](https://arxiv.org/abs/2309.05196) in LLM outputs and user [reliance](https://arxiv.org/abs/2605.29392) on coding agents, evaluating these with both [automatic evaluation](https://arxiv.org/abs/2504.09389) and [user studies](https://dl.acm.org/doi/abs/10.1145/3635636.3656201), and then proposing targeted [training](https://openreview.net/forum?id=1Pmuw08LoM) [methods](https://arxiv.org/abs/2303.04562) to mitigate these.
-
-I'm currently thinking about (1) how to mitigate user overreliance on AI, (2) how AI agents shape the future of work and education, (3) how to support co-creativity with foundation models, (4) how we can elicit more diverse and novel LLM outputs for applications like scientific discovery. Come talk to me about any of this for hot takes! 
+I'm interested in measuring and mitigating the societal impacts of AI. This involves designing metrics that quantify effects such as [homogenization](https://arxiv.org/abs/2309.05196) in LLM outputs and user [reliance](https://arxiv.org/abs/2605.29392) on coding agents, evaluating these with both [automatic evaluation](https://arxiv.org/abs/2504.09389) and [user studies](https://dl.acm.org/doi/abs/10.1145/3635636.3656201), and then proposing targeted [training](https://openreview.net/forum?id=1Pmuw08LoM) [methods](https://arxiv.org/abs/2303.04562) to mitigate these. <b> I'm on the faculty job market in 2026, please reach out to me if your department is hiring and I might be a good fit! </b> You can contact me at <vishakkp@stanford.edu> or <vishakh@nyu.edu>. 
 
 Prior to Stanford, I did my PhD from the [Center for Data Science](https://cds.nyu.edu/) at [New York University](https://www.nyu.edu/) where I was advised by [Prof. He He](https://hhexiy.github.io/). During that time, I also helped organize the [NYU NLP and Text-as-Data](https://cds.nyu.edu/text-data-speaker-series/) talk series for many years. I also did research at the [Center for Social Media and Politics](https://csmapnyu.org/) in NYU working on applying deep learning to computational social science tasks. Even further back, I did my undergrad at the [National Institute of Technology - Karnataka](https://www.nitk.ac.in/) where my thesis was advised by [Prof. Sowmya Kamath](https://infotech.nitk.ac.in/faculty/sowmya-kamath-s).
 
 Here's my [list of publications](https://vishakhpk.github.io/publications/), [CV](./assets/img/cv.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=OeBKZ8AAAAAJ&hl=en&oi=ao). Also experimenting with a fun visualization of my work [here]({{ '/research-constellation/' | relative_url }}).
 
-Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. You can contact me at <vishakkp@stanford.edu> or <vishakh@nyu.edu>. 
+Head over to my [personal blog](https://paddyspen.wordpress.com/) for more light hearted content. All the other relevant links are in the footer. 
 
 
 ### Updates:
